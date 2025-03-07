@@ -2,6 +2,17 @@
 
 ### Full Stack Application using Laravel & React
 
+<table>
+    <tr>
+        <td>
+            <a href="https://laravel.com"><img src="https://i.imgur.com/pBNT1yy.png" /></a>
+        </td>
+        <td>
+            <a href="https://react.dev/"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K" height="100"/></a>
+        </td>
+    </tr>
+</table>
+
 This project is a **full-stack eCommerce application** built with Laravel (backend) and React (frontend). It provides a structured approach for setting up an online store with modern technologies.
 
 ## 🚀 Installation
@@ -12,7 +23,7 @@ Make sure you have the proper development environment set up before proceeding.
 
 1. **Download the project** (or clone it using GIT)
    ```sh
-   git clone https://github.com/your-repo/laravel-react-ecommerce.git
+   git clone https://github.com/DocMX/laravel-react-ecommerce.git
    cd laravel-react-ecommerce
    ```
 2. **Copy the environment file and configure database credentials**
@@ -88,5 +99,7 @@ If you prefer a **faster and more efficient** local development setup, you can u
 
 ### Happy coding! 🎉
 
-sa
+Happy coding! 🎉
+
+🚀 Bonus Tip: "Great code is like a great joke—if you have to explain it, it's not that great!" 😆
 
