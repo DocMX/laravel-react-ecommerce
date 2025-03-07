@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from 'react';
 
-export default function PrimaryButton({
+export default function DangerButton({
     className = '',
     disabled,
     children,
@@ -10,7 +10,7 @@ export default function PrimaryButton({
         <button
             {...props}
             className={
-                `btn btn-primary ` + className
+                `btn btn-error ` + className
             }
             disabled={disabled}
         >
