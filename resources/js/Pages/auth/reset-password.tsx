@@ -6,7 +6,7 @@ import InputError from '@/Components/input-error';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
+import AuthLayout from '@/Layouts/auth-layout';
 
 interface ResetPasswordProps {
     token: string;
