@@ -9,6 +9,6 @@ class Department extends Model
 {
     public function categories(): HasMany
     {
-        return $this->hasMany(Category::class);
+        return $this->hasMany(Category::class, 'department_id');
     }
 }
