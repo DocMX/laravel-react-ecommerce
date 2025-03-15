@@ -6,12 +6,15 @@ use App\Enums\Enums\ProductStatusEnum;
 use App\Enums\RolesEnum;
 use Filament\Facades\Filament;
 use App\Filament\Resources\ProductResource\Pages;
+use App\Filament\Resources\ProductResource\Pages\EditProduct;
+use App\Filament\Resources\ProductResource\Pages\ProductImages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
@@ -25,6 +28,8 @@ class ProductResource extends Resource
     protected static ?string $model = Product::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::End;
 
     public static function form(Form $form): Form
     {
@@ -144,11 +149,24 @@ class ProductResource extends Resource
             'index' => Pages\ListProducts::route('/'),
             'create' => Pages\CreateProduct::route('/create'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
+            'images' => Pages\ProductImages::route('/{record}/images'),
         ];
     }
+    //this function makes a restriction so that only users type: 'vendor' can see products, if you want admin to see them just remove the function
     public static function canViewAny(): bool
     {
         $user = Filament::auth()->user();
         return $user && $user->hasRole(RolesEnum::Vendor);
     }
+
+
+    public static function getRecordSubNavigation($page): array
+    {
+        return
+            $page->generateNavigationItems([
+                EditProduct::class,
+                ProductImages::class,
+            ]);
+    }
+
 }
