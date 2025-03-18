@@ -55,11 +55,7 @@ Make sure you have the proper development environment set up before proceeding.
    ```sh
    cd react
    ```
-9. **Copy the React environment file and set the API base URL**
-   ```sh
-   cp .env.example .env
-   ```
-   - Update `VITE_API_BASE_URL` to match your backend URL (`http://127.0.0.1:8000/api` by default).
+
 10. **Install frontend dependencies**
     ```sh
     npm install
