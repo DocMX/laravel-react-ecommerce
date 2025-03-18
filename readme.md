@@ -47,22 +47,13 @@ Make sure you have the proper development environment set up before proceeding.
    ```sh
    php artisan storage:link
    ```
-7. **Start the backend server**
+7. **Start the server**
    ```sh
-   php artisan serve
+   php artisan serve and npm run dev
    ```
-8. **Open a new terminal and navigate to the React frontend folder**
-   ```sh
-   cd react
-   ```
-
-10. **Install frontend dependencies**
+8. **Alternatively, you can start the optional server with:**
     ```sh
-    npm install
-    ```
-11. **Start the Vite development server**
-    ```sh
-    npm run dev
+    composer run dev
     ```
 
 ---
@@ -77,11 +68,6 @@ If you prefer a **faster and more efficient** local development setup, you can u
 4. **Run migrations and seed the database**
    ```sh
    php artisan migrate --seed
-   ```
-5. **Start the frontend server**
-   ```sh
-   cd react
-   npm run dev
    ```
 6. **Access your Laravel app via** `http://your-app-name.test`
 
