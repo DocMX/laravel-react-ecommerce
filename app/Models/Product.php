@@ -11,7 +11,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;
-
+    
     public function registerMediaConversions( $media = null): void
     {
         $this->addMediaConversion('thumb')
