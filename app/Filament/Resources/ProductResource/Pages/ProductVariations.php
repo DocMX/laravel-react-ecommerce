@@ -175,14 +175,15 @@ class ProductVariations extends EditRecord
 
             //preparethe data structure for the data
             $formattedData[] = [
-                'variation_type_option_ids' => json_encode($variationTypeOptionIds), // Guardamos como JSON si es un array
+                'variation_type_option_ids' => $variationTypeOptionIds,
                 'quantity' => $option['quantity'] ?? null,
                 'price' => $option['price'] ?? null,
-                'id' => $option['id'],
+                'id' => $option['id'] ?? null,
             ];
         }
 
         $data['variations'] = $formattedData;
+        //dd($data['variations']); aqui se envia en array
         return $data;
     }
 
@@ -190,32 +191,99 @@ class ProductVariations extends EditRecord
     {
         $variations = $data['variations'];
         unset($data['variations']);
+        //dd($variations); sifgue array
+        // Actualizar los datos del registro principal
         $record->update($data);
+        //dd($data);
+        // Separar las variaciones en nuevas y existentes
+        $existingIds = [];
+        //dd($existingIds);
+        $updates = [];
+        $inserts = [];
+        //dd($updates); array vacio
+        //dd($inserts); esta vacio no arroja nada
+        //dd($variations); sigue array
+        //dd($variations);  // Esto mostrará todas las variaciones antes de procesarlas. y si trtan su ID
 
         foreach ($variations as &$variation) {
-            // Decodifica el JSON para convertirlo de vuelta en un array
-            $variation['variation_type_option_ids'] = json_decode($variation['variation_type_option_ids'], true);
-
-            // Asegura que tenga el ID del producto
+            //dd($variation); obtiene id de los registros que ya estan en la base de datyos
             $variation['product_id'] = $record->id;
+
+            if (isset($variation['id']) && !empty($variation['id'])) {
+                //dd($variation); aqui si llega el id
+                $updates[] = $variation;
+                $existingIds[] = $variation['id'];
+                //dd( $updates);
+                //dd($existingIds); aqui llega  0 => 1
+                //dd($variation['id']); aqui llega 1
+            } elseif (isset($variation['variation_type_option_ids']) && isset($variation['quantity']) && isset($variation['price'])) {
+                $inserts[] = $variation;
+                //dd($inserts); si llega en array
+            }
+        }
+        // Actualizar las variaciones existentes
+        if (!empty($updates)) {
+            $this->updateVariations($record, $updates);
         }
 
-        // Usamos `upsert` en lugar de eliminar y volver a insertar
-        $record->variations()->upsert(
-            collect($variations)->map(function ($variation) {
-                return [
-                    'id' => $variation['id'] ?? null,
-                    'variation_type_option_ids' => json_encode($variation['variation_type_option_ids']), // Convertir a JSON
-                    'quantity' => $variation['quantity'],
-                    'price' => $variation['price'],
-                    'updated_at' => now(),
-                ];
-            })->toArray(),
-            ['id'], // Clave para el conflicto
-            ['variation_type_option_ids', 'quantity', 'price', 'updated_at'] // Campos a actualizar
-        );
-        
+        // Insertar las nuevas variaciones
+        if (!empty($inserts)) {
+            $this->insertVariations($record, $inserts);
+            //dd($inserts); no llewga
+        }
+
+        if (!empty($existingIds)) {
+          //  dd($existingIds); 
+            $record->variations()
+                ->whereNotIn('id', $existingIds)
+                ->delete();
+        }
+        //dd($updates, $inserts, $existingIds);
 
         return $record;
+    }
+
+    protected function insertVariations(Model $record, array $variations): void
+    {
+        $now = now();
+        //dd($variations); aqui llega el array
+        $formattedVariations = collect($variations)->map(function ($variation) use ($record, $now) {
+            return [
+                'product_id' => $record->id,
+                'variation_type_option_ids' => json_encode($variation['variation_type_option_ids']),
+                'quantity' => $variation['quantity'],
+                'price' => $variation['price'],
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        })->toArray();
+        //dd($formattedVariations); llega el array json con comillas ejmplo "[2,5]"
+        $record->variations()->insert($formattedVariations);
+    }
+
+    protected function updateVariations(Model $record, array $variations): void
+    {
+        $now = now();
+        //dd($variations); llega en array
+        foreach ($variations as $variation) {
+            if (isset($variation['id']) && $variation['id']) {
+                $existingVariation = $record->variations()->find($variation['id']);
+                //dd($existingVariation); // se dan "variation_type_option_ids" => "[2,5]"
+                if ($existingVariation) {
+                    $variationTypeOptionIds = $variation['variation_type_option_ids'];
+                    if (is_array($variationTypeOptionIds)) {
+                        // Si ya es un array, no lo decodifiques
+                        $variationTypeOptionIds = json_encode($variationTypeOptionIds);  // Si es un array, conviértelo en JSON
+                    }
+                    $existingVariation->update([
+                       'variation_type_option_ids' => json_encode($variation['variation_type_option_ids']),
+                        'quantity' => $variation['quantity'],
+                        'price' => $variation['price'],
+                        'updated_at' => $now,
+                    ]);
+                }
+            }
+            //dd($variations);
+        }
     }
 }
