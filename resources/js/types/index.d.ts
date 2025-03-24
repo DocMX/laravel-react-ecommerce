@@ -16,6 +16,27 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     ziggy: Config & { location: string };
 };
 
+export type Product = {
+    id: number;
+    title: string;
+    slug: string;
+    price: number;
+    quantity: number;
+    image: string;
+    user: {
+        id: number;
+        name : string;
+    };
+    department: {
+        id: number;
+        name : string;
+    };
+};
+
+export type PaginationProps<T> = {
+    data: Array<T>
+};
+
 export interface BreadcrumbItem {
     title: string;
     href: string;
