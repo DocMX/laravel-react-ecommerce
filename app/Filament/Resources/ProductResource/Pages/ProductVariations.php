@@ -62,7 +62,6 @@ class ProductVariations extends EditRecord
             $this->record->variationTypes,
             $this->record->variations->toArray()
         );
-
         foreach ($variations as &$variation) {
             $variation['variation_type1_id'] = $variation['variation_type1']['id'] ?? null;
             $variation['variation_type1_name'] = $variation['variation_type1']['name'] ?? null;
@@ -94,16 +93,19 @@ class ProductVariations extends EditRecord
                 ->values()
                 ->toArray();
             //Find matching entry in existing data
-            $match = array_filter($existingData, function ($existingOption) use ($optionsIds) {
-                return $existingOption['variation_type_option_ids'] === $optionsIds;
-            });
+            $match = array_values(array_filter($existingData ?? [], function ($existingOption) use ($optionsIds) {
+                return isset($existingOption['variation_type_option_ids']) &&
+                    $existingOption['variation_type_option_ids'] === $optionsIds;
+            }));
 
             //if match is found, override quantity and price
             if (!empty($match)) {
-                $existingEntry = reset($match);
-                $product['id'] = $existingEntry['id'];
-                $product['quantity'] = $existingEntry['quantity'];
-                $product['price'] = $existingEntry['price'];
+                $existingEntry = $match[0] ?? null; // Evita errores de índice
+                if ($existingEntry) {
+                    $product['id'] = $existingEntry['id'] ?? null;
+                    $product['quantity'] = $existingEntry['quantity'];
+                    $product['price'] = $existingEntry['price'];
+                }
             } else {
                 //Set default quantity abd price if no match
                 $product['quantity'] = $defaultQuantity;
@@ -179,23 +181,35 @@ class ProductVariations extends EditRecord
         }
 
         $formattedData = [];
-
+        //aqui en teoria llega sin el id de una columna ya insertada
         foreach ($data['variations'] as $option) {
+
             $variationTypeOptionIds = [];
 
             foreach ($this->record->variationTypes as $variationType) {
-                // Verifica si la clave existe antes de intentar acceder a ella
+
                 if (isset($option['variation_type_' . $variationType->id])) {
                     $variationTypeOptionIds[] = $option['variation_type_' . $variationType->id]['id'] ?? null;
                 }
             }
 
-            $formattedData[] = [
-                'id' => $option['id'],
-                'variation_type_option_ids' => $variationTypeOptionIds,
-                'quantity' => $option['quantity'] ?? null,
-                'price' => $option['price'] ?? null,
-            ];
+            if (!empty($option['id'])) {
+                // Si el 'id' está presente, lo dejamos tal cual
+                $formattedData[] = [
+                    'id' => $option['id'],
+                    'variation_type_option_ids' => $variationTypeOptionIds,
+                    'quantity' => $option['quantity'] ?? null,
+                    'price' => $option['price'] ?? null,
+                ];
+            } else {
+                // Si no hay 'id' (es un nuevo registro), lo omitimos y dejamos que la base de datos se encargue
+                $formattedData[] = [
+                    //'id' => null, // La base de datos lo asignará si es autoincremental
+                    'variation_type_option_ids' => $variationTypeOptionIds,
+                    'quantity' => $option['quantity'] ?? null,
+                    'price' => $option['price'] ?? null,
+                ];
+            }
         }
 
         $data['variations'] = $formattedData;
@@ -207,26 +221,43 @@ class ProductVariations extends EditRecord
 
 
 
+
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
 
-        $variations =  $data['variations'];
-        unset($data['variations']);
+        // Recuperamos las variaciones y las preparamos para el upsert
+        $variations = $data['variations'];
+        unset($data['variations']); // Limpiamos el arreglo original
 
+        // Mapeamos las variaciones a la estructura correcta
         $variations = collect($variations)->map(function ($variation) {
-            return [
-                'id' => $variation['id'],
-                'variation_type_option_ids' => json_encode($variation['variation_type_option_ids']),
-                'quantity' => $variation['quantity'],
-                'price' => $variation['price'],
-            ];
-        })
-            ->toArray();
+            // Si el 'id' está presente, lo dejamos tal cual
+            // Si no está presente, no agregamos el campo 'id' (lo manejamos dentro del if)
+            if (isset($variation['id'])) {
+                // Si el 'id' está presente, mantenemos el valor
+                return [
+                    'id' => $variation['id'],
+                    'variation_type_option_ids' => json_encode($variation['variation_type_option_ids']),
+                    'quantity' => $variation['quantity'],
+                    'price' => $variation['price'],
+                ];
+            } else {
+                // Si el 'id' no está presente, lo omitimos (se espera que la base de datos lo maneje como nuevo)
+                return [
+                    'variation_type_option_ids' => json_encode($variation['variation_type_option_ids']),
+                    'quantity' => $variation['quantity'],
+                    'price' => $variation['price'],
+                ];
+            }
+        })->toArray();
+
+        // Realizamos el upsert
         $record->variations()->upsert($variations, ['id'], [
             'variation_type_option_ids',
             'quantity',
-            'price'
+            'price',
         ]);
+
         return $record;
     }
 }
