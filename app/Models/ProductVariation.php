@@ -10,6 +10,6 @@ class ProductVariation extends Model
         'variation_type_option_ids' => 'json',
     ];
 
-    protected $fillable = ['product_id', 'variation_type_option_ids', 'quantity', 'price'];
+   // protected $fillable = ['product_id', 'variation_type_option_ids', 'quantity', 'price'];
 
 }
