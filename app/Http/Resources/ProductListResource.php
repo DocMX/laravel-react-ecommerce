@@ -7,6 +7,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductListResource extends JsonResource
 {
+
+    
     /**
      * Transform the resource into an array.
      *
