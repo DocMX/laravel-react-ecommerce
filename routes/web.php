@@ -9,6 +9,10 @@ Route::get('/', [ProductController::class, 'home'])->name('dashboard');
 Route::get('/product/{product:slug}', [ProductController::class, 'show'])
     ->name('product.show');
 
+Route::post('/cart/store/{product}', function() {
+
+})->name('cart.store');
+
 /*Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
