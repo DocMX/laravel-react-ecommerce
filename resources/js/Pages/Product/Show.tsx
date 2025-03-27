@@ -126,11 +126,16 @@ function Show({product, variationOptions}:
                                 {type.options.map(option =>(
                                     <div onClick={() => chooseOption(type.id,
                                         option)} key={option.id}>
-                                        {option.images && <img src={option.images[0]
-                                            .thumb} alt="" className={'w-[50px] ' + (
-                                            selectedOptions[type.id]?.id === option.id ?
-                                                'outline outline-4 outline-primary' : ''
-                                        )}/>}
+                                        {option.images && 
+                                            <img 
+                                                src={option.images[0].thumb} 
+                                                alt="" 
+                                                className={`w-[50px] h-[50px] object-cover rounded-md border-2 cursor-pointer transition-all ${
+                                                    selectedOptions[type.id]?.id === option.id ? 'outline outline-4 outline-primary' : 'border-gray-300'
+                                                }`}
+                                            />
+                                        
+                                        }
                                     </div>
                                 ))}
                             </div>}
