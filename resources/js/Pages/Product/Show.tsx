@@ -8,7 +8,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 function Show({product, variationOptions}: 
     {product:Product, variationOptions:number[]}) {
-    console.log(variationOptions);
     const form = useForm<{
         option_ids: Record<string, number>;
         quantity: number;
@@ -20,9 +19,10 @@ function Show({product, variationOptions}:
     })
 
     const {url} = usePage();
-
+   
+   
     const [selectedOptions,setSelectedOptions]= 
-        useState<Record<number, VariationTypeOption>>({});
+        useState<Record<number, VariationTypeOption>>([]);
 
     const images = useMemo(() =>{
         for (let typeId in selectedOptions){
@@ -31,16 +31,19 @@ function Show({product, variationOptions}:
         }
         return product.images;
     },[product,selectedOptions]);
-    //console.log(selectedOptions);
+
+    
     const computedProduct = useMemo(() => {
-        
+
         const selectedOptionsIds = Object.values
             
             (selectedOptions)
                 .map(op => op.id)
                 .sort();
         for (let variation of product.variations){
-            const optionIds = variation.variation_type_option_ids.sort();
+            const optionIds = (variation.variation_type_option_ids)
+            ? [...variation.variation_type_option_ids].sort()
+            : [];
             if (arraysAreEqual(selectedOptionsIds, optionIds)) {
                 return{
                     price: variation.price,
@@ -54,6 +57,8 @@ function Show({product, variationOptions}:
             quantity: product.quantity
         };
     },[product, selectedOptions]);
+
+   
     useEffect(() =>{
         for (let type of product.variationTypes){
             const selectedOptionsId: number = variationOptions[type.id];
@@ -64,8 +69,8 @@ function Show({product, variationOptions}:
                 false
             )
         }
-    }, []);
-
+    }, [variationOptions, product.variationTypes]);
+   
     const getOptionIdsMap = (newOptions: object) =>{
         return Object.fromEntries(
             Object.entries(newOptions).map(([a, b]) => [a, b.id])
@@ -100,7 +105,7 @@ function Show({product, variationOptions}:
         (ev: React.ChangeEvent<HTMLSelectElement>) =>{
         form.setData('quantity', parseInt(ev.target.value))
     }
-
+    console.log("onchange",onQuantityChange);
     const addToCart = () => {
         form.post(route('cart.store', product.id), {
             preserveScroll:true,
@@ -122,7 +127,7 @@ function Show({product, variationOptions}:
                                     <div onClick={() => chooseOption(type.id,
                                         option)} key={option.id}>
                                         {option.images && <img src={option.images[0]
-                                            .thumb} alt="" className={'w-[50px]' + (
+                                            .thumb} alt="" className={'w-[50px] ' + (
                                             selectedOptions[type.id]?.id === option.id ?
                                                 'outline outline-4 outline-primary' : ''
                                         )}/>}
@@ -136,7 +141,7 @@ function Show({product, variationOptions}:
                                     option)}
                                         key={option.id}
                                         className='join-item btn'
-                                        type="radio"
+                                        type="Radio"
                                         value={option.id}
                                         checked={selectedOptions[type.id]?.id === option.id}
                                         name={'variation_type_' + type.id}
@@ -148,6 +153,7 @@ function Show({product, variationOptions}:
             )
         )
     }
+    
 
     const renderAddToCartButton = () => {
         return ( <div className='mb-8 flex gap-4'>
@@ -193,7 +199,6 @@ function Show({product, variationOptions}:
                             </div>
                         </div>
                         
-                        <pre>{JSON.stringify(product.variationTypes, undefined, 2)}</pre>
                         {renderProductVariationTypes()}
 
                         {computedProduct.quantity != undefined && computedProduct.quantity
@@ -202,13 +207,12 @@ function Show({product, variationOptions}:
                                 <span>Only {computedProduct.quantity} left</span>
                             </div>
                         }
-
+                      
                         {renderAddToCartButton()}
 
                         <b className='text-xl'>About the Item</b>
                         <div className='wysiwyg-output'
-                        dangerouslySetInnerHTML={{__html: product
-                        .description
+                        dangerouslySetInnerHTML={{__html: product.description
                         }}/>
                     </div>
                 </div>
