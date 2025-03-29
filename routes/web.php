@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -9,9 +10,14 @@ Route::get('/', [ProductController::class, 'home'])->name('dashboard');
 Route::get('/product/{product:slug}', [ProductController::class, 'show'])
     ->name('product.show');
 
-Route::post('/cart/store/{product}', function() {
+Route::controller(CartController::class)->group(function() {
+    Route::get('/cart', 'index')->name('cart.index');
+    Route::post('/cart/add/{product}', 'store')->name('cart.store');
+    Route::put('/cart/add/{product}', 'update')->name('cart.update');
+    Route::delete('/cart/add/{product}', 'destroy')->name('cart.destroy');
+});
 
-})->name('cart.store');
+
 
 /*Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
