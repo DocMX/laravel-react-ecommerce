@@ -37,6 +37,10 @@ class Product extends Model implements HasMedia
     {
         return $query->where('status', ProductStatusEnum::Published );
     }
+    public function scopeForWebsite(Builder $query) : Builder
+    {
+        return $query->published();
+    }
 
 
     public function department(): BelongsTo
