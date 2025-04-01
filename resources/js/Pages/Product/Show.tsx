@@ -62,7 +62,7 @@ function Show({product, variationOptions}:
     useEffect(() =>{
         for (let type of product.variationTypes){
             const selectedOptionsId: number = variationOptions[type.id];
-            console.log(selectedOptionsId, type.options)
+            
             chooseOption(
                 type.id,
                 type.options.find(op => op.id == selectedOptionsId) || type.options[0],
@@ -105,7 +105,7 @@ function Show({product, variationOptions}:
         (ev: React.ChangeEvent<HTMLSelectElement>) =>{
         form.setData('quantity', parseInt(ev.target.value))
     }
-    console.log("onchange",onQuantityChange);
+    
     const addToCart = () => {
         form.post(route('cart.store', product.id), {
             preserveScroll:true,
@@ -183,7 +183,7 @@ function Show({product, variationOptions}:
             Object.entries(selectedOptions).map(([typeId, option]:
                 [string, VariationTypeOption]) => [typeId,option.id])
         )
-        console.log(idsMap)
+        //console.log(idsMap)
         form.setData('option_ids', idsMap)
     }, [selectedOptions]);
 

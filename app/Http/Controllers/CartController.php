@@ -35,7 +35,7 @@ class CartController extends Controller
 
         $data = $request->validate([
             'option_ids'=>['nullable', 'array'],
-            'quantity' => ['requiered', 'integer', 'min:1'],
+            'quantity' => ['required', 'integer', 'min:1'],
         ]);
 
         $cartService->addItemToCart(
