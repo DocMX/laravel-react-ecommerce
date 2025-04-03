@@ -99,6 +99,7 @@ function Show({product, variationOptions}:
             
             return newOptions
         })
+       
     }
 
     const onQuantityChange = 
@@ -107,6 +108,7 @@ function Show({product, variationOptions}:
     }
     
     const addToCart = () => {
+        console.log("Opciones seleccionadas antes de añadir al carrito:", form.data.option_ids);
         form.post(route('cart.store', product.id), {
             preserveScroll:true,
             preserveState: true,
@@ -159,7 +161,7 @@ function Show({product, variationOptions}:
         )
     }
     
-
+    
     const renderAddToCartButton = () => {
         return ( <div className='mb-8 flex gap-4'>
                 <select value={form.data.quantity}
@@ -183,7 +185,7 @@ function Show({product, variationOptions}:
             Object.entries(selectedOptions).map(([typeId, option]:
                 [string, VariationTypeOption]) => [typeId,option.id])
         )
-        //console.log(idsMap)
+        console.log(idsMap)
         form.setData('option_ids', idsMap)
     }, [selectedOptions]);
 

@@ -41,7 +41,7 @@ class CartController extends Controller
         $cartService->addItemToCart(
             $product, 
             $data['quantity'], 
-            $data['option_ids']
+            $data['option_ids'],
         );
 
         return back()->with('success', 'Product added to cart succesfully!');

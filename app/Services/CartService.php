@@ -61,6 +61,7 @@ class CartService
 
     public function getCartItems(): array
     {
+        
         //we need to put this in try-catch, otherwise if something goes wrong
         // the website will not open at all.
         try {
@@ -72,6 +73,8 @@ class CartService
                     //If the user is a guest, retrieve from cookies.
                     $cartItems = $this->getCartItemsFromCookies();
                 }
+                //dd("Datos iniciales de cartItems:", $cartItems);
+
 
                 $productIds = collect($cartItems)->map(fn($item) => $item['product_id']);
                 $products = Product::whereIn('id', $productIds)
@@ -79,25 +82,34 @@ class CartService
                     ->forWebsite()
                     ->get()
                     ->keyBy('id');
-
+                //dd("Productos cargados:", $products);
                 $cartItemData = [];
+                
                 foreach ($cartItems as $key => $cartItem) {
+
                     $product = data_get($products, $cartItem['product_id']);
                     if (!$product) continue;
 
                     $optionInfo = [];
                     $options = VariationTypeOption::with('variationType')
-                        ->where('id', $cartItem['option_ids'])
+                        ->whereIn('id', $cartItem['option_ids'])
                         ->get()
                         ->keyBy('id');
+                        //dd("Option IDs esperados:", $cartItem['option_ids'], "Option IDs disponibles:", $options->keys());
+
 
                     $imageUrl = null;
-
+                    
                     foreach ($cartItem['option_ids'] as $option_id) {
+                       //dd($cartItem['option_ids']);
                         $option = data_get($options,$option_id);
+                        if (!$option) {
+                            dd("Error: opción es NULL para el ID:", $option_id, "Opciones disponibles:", $options); // <--- Agrega esto aquí
+                        }
                         if (!$imageUrl) {
                             $imageUrl = $option->getFirstMediaUrl('images', 'small');
                         }
+                       
                         $optionInfo[] = [
                             'id' => $option_id,
                             'name' => $option->name,
@@ -107,10 +119,13 @@ class CartService
 
                             ],
                         ];
+                        
                     }
+                 
+                    //dd("Datos de cartItems antes de iterar:", $cartItems);
 
                     $cartItemData[] = [
-                        'id' => $cartItem['id'],
+                        'id' => md5(json_encode($cartItem)), //md5(json_encode($cartItem)) or Uuid::uuid4()->toString(), // Genera un UUID únicocodeholic genera uuid 
                         'product_id' => $product->id,
                         'title'=> $product->title,
                         'slug'=> $product->slug,
@@ -123,15 +138,24 @@ class CartService
                             'id' => $product->created_by,
                             'name' => $product->user->vendor->store_name,
                         ],
+                       
                     ];
+                    
+                    
                 }
+               
                 $this->catchedCartItems = $cartItemData;
+                //dd("Datos finales de cartItemData:", $cartItemData);
             }
-
+           
             return $this->catchedCartItems;
+            //dd($catchedCartItems);
         } catch (\Throwable $e) {
+            //($e->getMessage(), $e->getTrace());
+            //throw $e;
             Log::error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
         }
+        //dd($this->catchedCartItems);
 
         return[];
     }
@@ -220,7 +244,7 @@ class CartService
     public function saveItemToCookies(int $productId, int $quantity, $price, $optionIds): void
     {
         $cartItems = $this->getCartItemsFromCookies();
-       
+
         ksort($optionIds);
 
         //Use a unique key based on product ID and option IDs
@@ -241,7 +265,7 @@ class CartService
 
         //Save updated cart items back to the cookie
         Cookie::queue(self::COOKIE_NAME, json_encode($cartItems), self::COOKIE_LIFETIME);
-        
+       
     }
 
     
