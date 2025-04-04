@@ -19,10 +19,44 @@ export default function MiniCartDropdown() {
                     <span className="indicator-item badge badge-sm">{totalQuantity}</span>
                 </div>
             </div>
-            <div tabIndex={0} className="card-compact z-1 dropdown-content card mt-3 w-52 bg-base-100 shadow">
+            <div tabIndex={0} className="card-compact z-1 dropdown-content card mt-3 w-[480px] bg-base-100 shadow">
                 <div className="card-body">
                     <span className="text-lg font-bold">{totalQuantity} Items</span>
-                    <span className="text-info">
+
+                    <div className={'my-4 max-h-[300px] overflow-auto'}>
+                        {cartItems.length === 0 && (
+                            <div className={'py-2 text-gray-500 text-center'}>
+                                You don't have any items yet.
+                            </div>
+                        )}
+                        {cartItems.map((item) =>(
+                            <div key={item.id} className={'flex gap-4 p-3'}>
+                                <Link href={route('product.show', item.slug)} 
+                                        className={'w-16 h-16 flex justify-center items-center '}>
+                                    <img src={item.image} 
+                                         alt={item.title}
+                                         className={'max-w-full max-he-full'}/>
+                                </Link>
+                                <div className={'flex-1'}>
+                                    <h3 className={'mb-3 font-semibold'}>
+                                        <Link href={route('product.show' , item.slug)}>
+                                            {item.title}
+                                        </Link>
+                                    </h3>
+                                    <div className={'flex justify-between text-sm'}>
+                                        <div>
+                                            Quantity: {item.quantity}
+                                        </div>
+                                        <div>
+                                            <CurrencyFormatter amount={item.quantity * item.price} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <span className="text-lg">
                         Subtotal: <CurrencyFormatter amount={totalPrice} />
                     </span>
                     <div className="card-actions">

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Services\CartService;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+
 
 class CartController extends Controller
 {
@@ -13,7 +15,10 @@ class CartController extends Controller
      */
     public function index(CartService $cartService)
     {
-        dd($cartService);
+       return Inertia::render('Cart/Index', [
+        'cartItems' => $cartService->getCartItemsGrouped(),
+ 
+       ]);
     }
 
     /**
@@ -75,5 +80,10 @@ class CartController extends Controller
         $cartService->removeItemFromCart($product->id, $optionIds);
 
         return back()->with('success','Product was removed from cart');
+    }
+
+    public function checkout()
+    {
+        
     }
 }
