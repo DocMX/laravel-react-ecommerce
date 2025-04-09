@@ -10,6 +10,7 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
+    // FUNCTION FOR PRODUCTS
     public function home()
     {
         $products = Product::query()

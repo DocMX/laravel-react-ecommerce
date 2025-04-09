@@ -321,7 +321,7 @@ class CartService
 
         return $cartItems;
     }
-
+    //TEST
     public function getCartItemsGrouped(): array
     {
         $cartItems = $this->getCartItems();
