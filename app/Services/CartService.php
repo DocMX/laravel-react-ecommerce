@@ -51,9 +51,11 @@ class CartService
 
     public function removeItemFromCart(int $productId, $optionIds = null)
     {
+       
         if (Auth::check()) {
             $this->removeItemFromDatabase($productId, $optionIds);
         } else {
+            //dd($optionIds); // app\Services\CartService.php:58
             $this->removeItemFromCookies($productId, $optionIds);
         }
         
@@ -73,7 +75,7 @@ class CartService
                     //If the user is a guest, retrieve from cookies.
                     $cartItems = $this->getCartItemsFromCookies();
                 }
-                //dd("Datos iniciales de cartItems:", $cartItems);
+
 
 
                 $productIds = collect($cartItems)->map(fn($item) => $item['product_id']);
@@ -82,7 +84,6 @@ class CartService
                     ->forWebsite()
                     ->get()
                     ->keyBy('id');
-                //dd("Productos cargados:", $products);
                 $cartItemData = [];
                 
                 foreach ($cartItems as $key => $cartItem) {
@@ -95,13 +96,12 @@ class CartService
                         ->whereIn('id', $cartItem['option_ids'])
                         ->get()
                         ->keyBy('id');
-                        //dd("Option IDs esperados:", $cartItem['option_ids'], "Option IDs disponibles:", $options->keys());
+                      
 
 
                     $imageUrl = null;
                     
                     foreach ($cartItem['option_ids'] as $option_id) {
-                       //dd($cartItem['option_ids']);
                         $option = data_get($options,$option_id);
                         if (!$option) {
                             dd("Error: opción es NULL para el ID:", $option_id, "Opciones disponibles:", $options); // <--- Agrega esto aquí
@@ -121,8 +121,6 @@ class CartService
                         ];
                         
                     }
-                 
-                    //dd("Datos de cartItems antes de iterar:", $cartItems);
 
                     $cartItemData[] = [
                         'id' => md5(json_encode($cartItem)), //md5(json_encode($cartItem)) or Uuid::uuid4()->toString(), // Genera un UUID únicocodeholic genera uuid 
@@ -145,17 +143,14 @@ class CartService
                 }
                
                 $this->catchedCartItems = $cartItemData;
-                //dd("Datos finales de cartItemData:", $cartItemData);
             }
            
             return $this->catchedCartItems;
-            //dd($catchedCartItems);
         } catch (\Throwable $e) {
             //($e->getMessage(), $e->getTrace());
             //throw $e;
             Log::error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
         }
-        //dd($this->catchedCartItems);
 
         return[];
     }
@@ -269,7 +264,7 @@ class CartService
     }
 
     
-    public function removeItemFromDatabase(int $productId,array $optionIds ): void
+    public function removeItemFromDatabase(int $productId,array $optionIds )
     {
         $userId = Auth::id();
         ksort($optionIds);
@@ -280,12 +275,13 @@ class CartService
             ->delete();
     }
 
-    public function removeItemFromCookies(int $productId,array $optionIds): void
+    public function removeItemFromCookies(int $productId,array $optionIds)
     {
         
         $cartItems = $this->getCartItemsFromCookies();
+        
         ksort($optionIds);
-
+       
         //Define the cart Key
         $cartKey = $productId . '_' . json_encode($optionIds);
 
