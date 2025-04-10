@@ -55,7 +55,7 @@ class CartService
         if (Auth::check()) {
             $this->removeItemFromDatabase($productId, $optionIds);
         } else {
-            //dd($optionIds); // app\Services\CartService.php:58
+      
             $this->removeItemFromCookies($productId, $optionIds);
         }
         

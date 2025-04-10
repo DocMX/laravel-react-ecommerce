@@ -75,7 +75,6 @@ class CartController extends Controller
      */
     public function destroy(Request $request,Product $product , CartService $cartService)
     {
-        //dd($request->all());
         $optionIds = $request -> input('option_ids');
 
         $cartService->removeItemFromCart($product->id, $optionIds);
