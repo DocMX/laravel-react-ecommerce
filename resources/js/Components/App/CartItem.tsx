@@ -6,6 +6,32 @@ import CurrencyFormatter from "@/Components/Core/CurrencyFormatter";
 import { productRoute } from "@/helpers";
 
 export default function CartItem({item} : {item: CartItemType}) {
+  const deleteForm = useForm({
+    option_ids: item.option_ids
+  })
+
+  const [error, setError] = useState('')
+
+  const onDeleteClick = () => {
+    deleteForm.delete(route('cart.destroy', item.product_id),{
+      preserveScroll: true
+    })
+  }
+
+  //Handle quantity change and immediately update the form
+  const handleQuantityChange = (ev:React.ChangeEvent<HTMLInputElement>) =>{
+    setError('')
+    router.put(route('cart.update', item.product_id), {
+      quantity: ev.target.value,
+      option_ids: item.option_ids
+    },{
+      preserveScroll: true,
+      onError: (errors) => {
+        setError(Object.values(errors)[0])
+      }
+    })
+  };
+
   return (
     <>
       <div key={item.id} className="flex gap-6 p-3">
@@ -42,9 +68,15 @@ export default function CartItem({item} : {item: CartItemType}) {
                       
                     </TextInput>
                 </div>
-                <button>
-                  
+                <button onClick={()=>onDeleteClick()} className="btn btn-sm btn-ghost">
+                  Delete
                 </button>
+                <button className="btn btn-sm btn-ghost">
+                  Save for Later
+                </button>
+              </div>
+              <div className="font-bold text-lg">
+                  <CurrencyFormatter amount={item.price * item.quantity} />
               </div>
           </div>
         </div>
