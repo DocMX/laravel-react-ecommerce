@@ -17,7 +17,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     ziggy: Config & { location: string };
     totalPrice: number;
     totalQuantity: number;
-    cartItems:CartItem[]
+    miniCartItems:CartItem[]
 };
 
 export type CartItem = {

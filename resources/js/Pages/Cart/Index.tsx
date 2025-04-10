@@ -27,6 +27,7 @@ export default function Index(
                         )}
                         {Object.values(cartItems).map(cartItem =>(
                             <div key={cartItem.user.id}>
+                        
                                 <div className={"flex items-center justify-center justify-between pb-4 border-b border-gray-300 mb-4"}>
                                     <Link href="/" className={"underline"}>
                                         {cartItem.user.name}
@@ -45,9 +46,9 @@ export default function Index(
                                     </div>
                                 </div>
                                 {cartItem.items.map(item =>(
-                                    <>
+                                    <pre>
                                     {JSON.stringify(item,undefined,2)}
-                                    </>
+                                    </pre>
                                 ))}
                             </div>
                         ))}
