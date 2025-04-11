@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CartItem extends Model
 {
-    //
+    protected $cast = [
+        'variation_type_option_ids' => 'array'
+    ];
 }

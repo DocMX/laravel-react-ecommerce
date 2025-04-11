@@ -46,7 +46,7 @@ class CartController extends Controller
         $cartService->addItemToCart(
             $product, 
             $data['quantity'], 
-            $data['option_ids'],
+            $data['option_ids'] ?: [],
         );
 
         return back()->with('success', 'Product added to cart succesfully!');
@@ -61,7 +61,7 @@ class CartController extends Controller
             'quantity' => ['integer', 'min:1']
         ]);
 
-        $optionIds = $request->input('option_ids'); //Get the option ID
+        $optionIds = $request->input('option_ids') ?: []; //Get the option ID
         $quantity = $request->input('quantity'); //Get the new quantity
 
         $cartService->updateItemQuantity($product->id, $quantity, $optionIds);

@@ -27,7 +27,7 @@ class CartService
                 ->mapWithKeys(fn(VariationType $type) => [$type->id => $type->options[0]?->id])
                 ->toArray();
         }
-        
+        ksort($optionIds);
         $price = $product -> getPriceForOptions($optionIds);
        
         if (Auth::check()) {
@@ -42,6 +42,7 @@ class CartService
 
     public function updateItemQuantity(int $productId, int $quantity,$optionIds = null)
     {
+        ksort($optionIds);
         if (Auth::check()) {
             $this->updateItemQuantityInDatabase($productId, $quantity, $optionIds);
         } else {
@@ -52,6 +53,7 @@ class CartService
     public function removeItemFromCart(int $productId, $optionIds = null)
     {
        
+        ksort($optionIds);
         if (Auth::check()) {
             $this->removeItemFromDatabase($productId, $optionIds);
         } else {
@@ -68,15 +70,19 @@ class CartService
         // the website will not open at all.
         try {
             if ($this->catchedCartItems === null) {
+           
                 //If the user is authenticate, retrieve from the database
                 if (Auth::check()) {
+                    
                     $cartItems = $this->getCartItemsFromDatabase();
+                    
+                    
                 } else {
                     //If the user is a guest, retrieve from cookies.
                     $cartItems = $this->getCartItemsFromCookies();
                 }
 
-
+                //dd($cartItems);
 
                 $productIds = collect($cartItems)->map(fn($item) => $item['product_id']);
                 $products = Product::whereIn('id', $productIds)
@@ -179,10 +185,10 @@ class CartService
     public function updateItemQuantityInDatabase(int $productId, int $quantity, array $optionIds): void
     {
         $userId = Auth::id();
-
+        ksort($optionIds);
         $cartItem = CartItem::where('user_id' , $userId)
             ->where('product_id' , $productId)
-            ->where('variation_type_option_ids', json_encode($optionIds))
+            ->whereRaw('variation_type_option_ids::jsonb = ?::jsonb', [json_encode($optionIds)])
             ->first();
 
         if ($cartItem) {
@@ -190,6 +196,7 @@ class CartService
                 'quantity' => $quantity,
             ]);
         }
+        
     }
 
     public function updateItemQuantityInCookies(int $productId, int $quantity, array $optionIds): void
@@ -217,7 +224,7 @@ class CartService
 
         $cartItem = CartItem::where('user_id', $userId)
             ->where('product_id', $productId)
-            ->where('variation_type_option_ids', json_encode($optionIds))
+            ->whereRaw('variation_type_option_ids::jsonb = ?::jsonb', [json_encode($optionIds)])
             ->first();
 
         if ($cartItem) {
@@ -230,7 +237,7 @@ class CartService
                 'product_id' => $productId,
                 'quantity' => $quantity,
                 'price' => $price,
-                'variation_type_option_ids' => $optionIds,
+                'variation_type_option_ids' => json_encode($optionIds), // siempre guarda como json
             ]);
         }
         
@@ -244,7 +251,7 @@ class CartService
 
         //Use a unique key based on product ID and option IDs
         $itemKey = $productId . '_' . json_encode($optionIds);
-
+        //dd($optionIds, $quantity, $price);
         if (isset($cartItems[$itemKey])) {
             $cartItems[$itemKey]['quantity'] = $quantity;
             $cartItems[$itemKey]['price'] = $price;
@@ -271,7 +278,7 @@ class CartService
 
         CartItem::where('user_id' , $userId)
             ->where('product_id' , $productId)
-            ->where('variation_type_option_ids', json_encode($optionIds))
+            ->whereRaw('variation_type_option_ids::jsonb = ?::jsonb', [json_encode($optionIds)])
             ->delete();
     }
 
@@ -294,7 +301,7 @@ class CartService
     public function getCartItemsFromDatabase()
     {
         $userId = Auth::id();
-
+      
         $cartItems = CartItem::where('user_id', $userId)
             ->get()
             ->map(function ($cartItem) {
@@ -303,12 +310,15 @@ class CartService
                     'product_id' => $cartItem-> product_id,
                     'quantity' => $cartItem->quantity,
                     'price' => $cartItem->price,
-                    'option_ids' => $cartItem->variation_type_options_ids,
+                    'option_ids' => is_array($cartItem->variation_type_option_ids) 
+                        ? $cartItem->variation_type_option_ids 
+                        : json_decode($cartItem->variation_type_option_ids, true),
                 ];
             })
             ->toArray();
-
+            
         return $cartItems;
+        
     }
 
     public function getCartItemsFromCookies()
@@ -330,5 +340,42 @@ class CartService
                 'totalQuantity' => $items->sum('quantity'),
                 'totalPrice' => $items->sum(fn ($item) => $item['price'] * $item['quantity']),
             ])->toArray();
+    }
+
+    public function moveCartItemsToDatabase($userId): void
+    {
+        //Get the cart items from the cookie
+        $cartItems = $this-> getCartItemsFromCookies();
+        //dd($cartItems); 
+        //Loop through the cart items and insert them into the database
+        foreach ($cartItems as $itemKey => $cartItem) {
+            //Check if the cart item already exists for the user
+            $existingItem = CartItem::where('user_id', $userId)
+                ->where('product_id', $cartItem['product_id'])
+                ->whereRaw("variation_type_option_ids::text = ?", [json_encode($cartItem['option_ids'])])
+                ->first();
+           
+            if ($existingItem) {
+                //If the item exists, update the quantity
+                $existingItem->update([
+                    'quantity' => $existingItem->quantity + $cartItem['quantity'],
+                    'price' => $cartItem['price'], //Optional:update price if needed
+                ]);
+            } else {
+                //If the item doesn't exist, create a new record
+                CartItem::create([
+                    'user_id' => $userId,
+                    'product_id' => $cartItem['product_id'],
+                    'quantity' => $cartItem['quantity'],
+                    'price' => $cartItem['price'],
+                    'variation_type_option_ids' => json_encode($cartItem['option_ids']),
+
+                ]);
+            }
+            
+        }
+
+        //After transferring the items, delete the cart from the cookies
+        Cookie::queue(self::COOKIE_NAME, '',-1); // Delete cookie by setting
     }
 }
