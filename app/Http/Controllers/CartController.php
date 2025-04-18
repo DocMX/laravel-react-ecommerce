@@ -89,7 +89,8 @@ class CartController extends Controller
 
     public function checkout(Request $request, CartService $cartService)
     {
-        Stripe::setApiKey(config('app.stripe_secret_key'));
+        //dd($request);
+        \Stripe\Stripe::setApiKey(config('app.stripe_secret_key'));
 
         $vendorId = $request->input('vendor_id');
 
@@ -111,7 +112,7 @@ class CartController extends Controller
                     'stripe_session_id' => null,
                     'user_id' => $request -> user()->id,
                     'vendor_user_id' => $user['id'],
-                    'total_price' => $item['total_price'],
+                    'total_price' => $item['totalPrice'],
                     'status' => OrderStatusEnum::Draft->value
                 ]);
 
@@ -122,7 +123,7 @@ class CartController extends Controller
                     OrderItem::create([
                         'order_id' => $order->id,
                         'product_id' => $cartItem['product_id'],
-                        'quantity' => $cartIte['quantity'],
+                        'quantity' => $cartItem['quantity'],
                         'price'=> $cartItem['price'],
                         'variation_type_option_ids'=> $cartItem['option_ids'],
                     ]);
@@ -149,7 +150,7 @@ class CartController extends Controller
                     $lineItems[]= $lineItem;
                 }
             }
-            $session = Session::create([
+            $session = \Stripe\Checkout\Session::create([
                 'customer_email' => $request->user()->email,
                 'line_items' => $lineItems,
                 'mode' => 'payment',

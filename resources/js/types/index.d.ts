@@ -10,7 +10,9 @@ export interface User {
 }
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
-    csrf_token?:string;
+    csrf_token:string;
+    error: string;
+    success: string;
     auth: {
         user: User;
     };

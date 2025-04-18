@@ -3,6 +3,7 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Route;
 
 //Guest routes
@@ -17,7 +18,7 @@ Route::controller(CartController::class)->group(function() {
     Route::delete('/cart/add/{product}', 'destroy')->name('cart.destroy');
 });
 
-Route::post('/stripe/webhook', [StripeControntroller::class, 'webhook'])
+Route::post('/stripe/webhook', [StripeController::class, 'webhook'])
     ->name('stripe.webhook');
 
 
@@ -32,10 +33,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/cart/checkout',[CartController::class, 'checkout'])
             ->name('cart.checkout');
 
-        Route::get('/stripe/success', [StripeControntroller::class, 'success'])
+        Route::get('/stripe/success', [StripeController::class, 'success'])
             ->name('stripe.success');
 
-        Route::get('/stripe/failure', [StripeControntroller::class, 'failure'])
+        Route::get('/stripe/failure', [StripeController::class, 'failure'])
             ->name('stripe.failure');
     });
 });
