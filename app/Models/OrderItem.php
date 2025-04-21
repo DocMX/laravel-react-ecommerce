@@ -15,6 +15,7 @@ class OrderItem extends Model
         'variation_type_option_ids' => 'array'
     ];
 
+    
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
