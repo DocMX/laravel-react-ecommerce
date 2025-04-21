@@ -22,6 +22,7 @@ class CartController extends Controller
     {
        return Inertia::render('Cart/Index', [
         'cartItems' => $cartService->getCartItemsGrouped(),
+        'csrf_token' => csrf_token(),
  
        ]);
     }
@@ -87,6 +88,7 @@ class CartController extends Controller
         return back()->with('success','Product was removed from cart');
     }
 
+    //Checkout with stripe
     public function checkout(Request $request, CartService $cartService)
     {
         

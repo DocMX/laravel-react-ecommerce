@@ -8,6 +8,7 @@ import { CreditCardIcon } from 'lucide-react';
 
 export default function Index({ csrf_token, cartItems, totalQuantity, totalPrice }: 
         PageProps<{ cartItems: Record<number, GroupedCartItems> }>) {
+            console.log(csrf_token)
     return (
         <AuthenticatedLayout>
             <Head title="Your Cart" />
@@ -43,6 +44,7 @@ export default function Index({ csrf_token, cartItems, totalQuantity, totalPrice
                                                 <CurrencyFormatter amount={totalPrice} />
                                                 <form action={route('cart.checkout')} method="post">
                                                     <input type="hidden" name="_token" value={csrf_token} />
+                                                    
                                                     <PrimaryButton className="rounded-full">
                                                         <CreditCardIcon className={'size-6'} />
                                                             Procced to checkout

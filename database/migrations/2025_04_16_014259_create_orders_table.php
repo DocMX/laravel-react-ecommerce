@@ -32,7 +32,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products');
             $table->decimal('price', 20 ,4);
             $table->integer('quantity');
-            $table->json('variation_type_options_ids')->nullable();
+            $table->json('variation_type_option_ids')->nullable();
         });
     }
 
