@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -19,6 +20,7 @@ class StripeController extends Controller
 
     public function webhook(Request $request)
     {
+        //crear una para shopify en caso de cambiar el provedor de pagos
         $stripe = new \Stripe\StripeClient(config('app.stripe_secret_key'));
 
         $endpoint_secret = config('app.stripe_endpoint_secret');
@@ -51,6 +53,12 @@ class StripeController extends Controller
                 $charge = $event->data->object;
                 $transactionId = $charge['balance_transaction'];
                 $paymentIntent = $charge['payment_intent'];
+                $balanceTransaction = $stripe->balanceTransactions->retrieve($transactionId);
+
+                $orders = Order::where('payment_intent',$paymentIntent)
+                    ->get();
+                $totalAmount = $balanceTransaction['amount'];
+                $stripeFee = 0;
                 // Send email to buyer
             case 'checkout.session.completed':
        
