@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Log;
 
 class ShopifyController extends Controller
 {
-    //FOR SHOPIFY
+    //this content dont have nothing to make in this project for the moment
+    //FOR SHOPIFY 
     public function handleShopifyWebhook(Request $request)
     {
         // Verifica la firma del webhook (opcional pero recomendado)
