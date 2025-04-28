@@ -19,10 +19,10 @@ class StripeController extends Controller
         //crear una para shopify en caso de cambiar el provedor de pagos
         $stripe = new \Stripe\StripeClient(config('app.stripe_secret_key'));
 
-        $endpoint_secret = config('app.stripe_endpoint_secret');
+        $endpoint_secret = config('app.stripe_webhook_secret');
 
         $payload = $request->getContent();
-        $sig_header = request()->header('Stripe_Signature');
+        $sig_header = request()->header('Stripe-Signature');
         $event = null;
 
         try {
@@ -47,7 +47,7 @@ class StripeController extends Controller
 
         //Handle the Event
         switch ($event->type) {
-            case 'carg.updated':
+            case 'charge.updated':
                 $charge = $event->data->object;
                 $transactionId = $charge['balance_transaction'];
                 $paymentIntent = $charge['payment_intent'];
@@ -105,7 +105,7 @@ class StripeController extends Controller
                         if ($options) {
                             sort($options);
                             $variation = $product->variations()
-                                ->where('variation_type_option_ids', $options)
+                                ->whereJsonContains('variation_type_option_ids', $options) //->where('variation_type_option_ids', $options) insqllite
                                 ->first();
                             if ($variation && $variation ->quantity != null) {
                                 $variation->quantity-= $orderItem->quantity;
