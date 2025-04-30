@@ -91,6 +91,7 @@ export type Product = {
         quantity: number;
         price: number;
     }>
+    
 };
 
 export type OrderItem = {

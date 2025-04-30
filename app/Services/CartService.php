@@ -378,4 +378,6 @@ class CartService
         //After transferring the items, delete the cart from the cookies
         Cookie::queue(self::COOKIE_NAME, '',-1); // Delete cookie by setting
     }
+
+    
 }

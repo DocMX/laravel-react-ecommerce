@@ -27,7 +27,7 @@ export default function Login({ status, canResetPassword }: { status?: string; c
             <Head title="Log in" />
 
             <div className="p-8">
-                <div className="card bg-gray mas-x-[430px] mx-auto shadow">
+                <div className="card bg-gray max-w-[600px] mx-auto shadow">
                     <div className="card-body p-6">
                         {status && <div className="mb-4 text-sm font-medium text-green-600">{status}</div>}
 
