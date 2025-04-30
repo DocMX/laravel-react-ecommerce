@@ -15,9 +15,12 @@ class StripeController extends Controller
     public function success(Request $request) 
     {
         $user = auth()->user();
+        
         $session_id = $request->get('session_id');
         $orders = Order::where('stripe_session_id', $session_id)
+            ->with(['vendorUser', 'orderItems.product'])
             ->get();
+        //dd($orders );
         if ($orders->count() === 0) {
             abort(404);
         }
@@ -34,7 +37,9 @@ class StripeController extends Controller
 
     }
 
-    public function failure() {}
+    public function failure() {
+        return Inertia::render('Stripe/Failure');
+    }
 
     public function webhook(Request $request)
     {

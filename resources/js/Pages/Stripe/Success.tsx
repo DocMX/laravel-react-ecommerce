@@ -5,13 +5,14 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { PageProps, Order } from "@/types";
 
 export default function Success({orders}: PageProps<{orders: Order[]}>) {
+  console.log(orders)
   return (
    <AuthenticatedLayout>
-    <Head title="Payment was Completed">
+    <Head title="Payment was Completed" />
       {/*<pre>{JSON.stringify(order, undefinded, 2)}</pre> */}
       <div className="w-[480px] mx-auto py-8 px-4">
         <div className="flex flex-col gap-2 items-center">
-          <div className="text-6xl text-esmerald-600">
+          <div className="text-6xl text-emerald-600">
             <CheckCircleIcon className={"size-24"} />
           </div>
           <div className="text-3xl">
@@ -74,7 +75,7 @@ export default function Success({orders}: PageProps<{orders: Order[]}>) {
           </div>
         ))}
       </div>
-    </Head>
+    
    </AuthenticatedLayout>
   )
 }

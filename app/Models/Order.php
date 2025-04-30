@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Order extends Model
 {
     protected $fillable = [
-        'stripe_session_id', 
-        'user_id', 
-        'total_price', 
+        'stripe_session_id',
+        'user_id',
+        'total_price',
         'status',
         'online_payment_commission',
         'website_commission',
@@ -38,6 +38,12 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'vendor_user_id');
     }
+    public function vendorUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'vendor_user_id');
+    }
+
+
 
     /**
      * Get the user that owns the Order

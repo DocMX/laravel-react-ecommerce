@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderViewResource extends JsonResource
 {
+    public static $wrap = false;
     /**
      * Transform the resource into an array.
      *
@@ -19,7 +20,7 @@ class OrderViewResource extends JsonResource
             'total_price' => $this->total_price,
             'status' => $this->status,
             'created_at'=> $this->created_at->format('Y-m-d H:i:s'),
-            'vendorUser'=> new VendorUserResource($this->vendorUser),
+            'vendorUser' => new VendorUserResource($this->whenLoaded('vendorUser')),
             'orderItems'=> $this->orderItems->map(fn($item) => [
                 'id' => $item->id,
                 'quantity'=> $item -> quantity,
