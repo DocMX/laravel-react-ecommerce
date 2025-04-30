@@ -49,6 +49,7 @@ export type Image = {
     thumb: string;
     small: string;
     large: string;
+    alt: string;
 }
 
 export type VariationTypeOption = {

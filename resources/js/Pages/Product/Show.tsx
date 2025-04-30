@@ -108,7 +108,7 @@ function Show({product, variationOptions}:
     }
     
     const addToCart = () => {
-        console.log("Opciones seleccionadas antes de añadir al carrito:", form.data.option_ids);
+        //console.log("Opciones seleccionadas antes de añadir al carrito:", form.data.option_ids);
         form.post(route('cart.store', product.id), {
             preserveScroll:true,
             preserveState: true,
@@ -122,7 +122,7 @@ function Show({product, variationOptions}:
         return (
             product.variationTypes.map((type,i) => (
                     <div key={type.id}>
-                        <b>{type.id}</b>
+                        
                         {type.type === 'Image' &&
                             <div className='flex gap-2 mb-4'>
                                 {type.options.map(option =>(
@@ -163,10 +163,12 @@ function Show({product, variationOptions}:
     
     
     const renderAddToCartButton = () => {
+        const isOutOfStock = computedProduct.quantity === 0;
         return ( <div className='mb-8 flex gap-4'>
                 <select value={form.data.quantity}
                     onChange={onQuantityChange}
-                    className="select select-bordered w-full" >
+                    className="select select-bordered w-full" 
+                    disabled={isOutOfStock}>
 
                     {Array.from({
                         length: Math.min(10, computedProduct.quantity)
@@ -174,7 +176,14 @@ function Show({product, variationOptions}:
                         <option value={i + 1} key={i + 1}>Quantity: {i + 1}</option>
                     ))}
                 </select>
-                <button onClick={addToCart} className='btn btn-primary'>Add to Card</button>
+                <button
+                    onClick={addToCart}
+                    className='btn btn-primary'
+                    disabled={isOutOfStock}
+                 >
+                    {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+                </button>
+
             </div>
             
         )
@@ -185,7 +194,7 @@ function Show({product, variationOptions}:
             Object.entries(selectedOptions).map(([typeId, option]:
                 [string, VariationTypeOption]) => [typeId,option.id])
         )
-        console.log(idsMap)
+        //console.log(idsMap)
         form.setData('option_ids', idsMap)
     }, [selectedOptions]);
 
@@ -214,6 +223,12 @@ function Show({product, variationOptions}:
                                 <span>Only {computedProduct.quantity} left</span>
                             </div>
                         }
+                        {computedProduct.quantity === 0 && (
+                            <div className='text-error my-4'>
+                                <span>This product is currently out of stock.</span>
+                            </div>
+                        )}
+
                       
                         {renderAddToCartButton()}
 
