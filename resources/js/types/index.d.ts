@@ -115,6 +115,7 @@ export type Order = {
         store_name: string;
         store_address: string;
     };
+    orderItems: OrderItem[];
 }
 
 
