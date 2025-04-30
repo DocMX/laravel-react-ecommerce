@@ -1,10 +1,7 @@
-import ApplicationLogo from '@/Components/App/ApplicationLogo';
+
 import Navbar from '@/Components/App/Navbar';
-import Dropdown from '@/Components/Core/Dropdown';
-import NavLink from '@/Components/Core/NavLink';
-import ResponsiveNavLink from '@/Components/Core/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
-import { PropsWithChildren, ReactNode, useState } from 'react';
+import { PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react';
 
 export default function AuthenticatedLayout({
    
@@ -13,9 +10,37 @@ export default function AuthenticatedLayout({
 }: PropsWithChildren<{ header?: ReactNode }>) {
     const props= usePage().props;
     const user = usePage().props.auth.user;
+
+    const [successMessage, setSuccessMessages] = useState<any[]>([]);
+    const timeoutRefs = useRef<{[key: number]:ReturnType<typeof setTimeout> }>({}); //store timeouts by message ID
     
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+
+    useEffect(()=>{
+        if (props.success.message) {
+            const newMessage = {
+                ...props.success,
+                id: props.success.time, //Use time as unique identifier
+            };
+            
+            //Add the new message to the list
+            setSuccessMessages((prevMessages)=> [newMessage, ...prevMessages]);
+
+            //Set a timeout for this specific message
+            const timeoutId=setTimeout(() => {
+                //use a functional update to ensure the latest state is used
+                setSuccessMessages((prevMessages)=>
+                prevMessages.filter((msg)=>msg.id !== newMessage.id));
+                
+                //Clear timeout from refs after execution
+                delete timeoutRefs.current[newMessage.id];
+            }, 5000);
+
+            //Store the timeout ID in the ref
+            timeoutRefs.current[newMessage.id] = timeoutId;
+        }
+    },[props.success]);
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -26,6 +51,16 @@ export default function AuthenticatedLayout({
                     <div className='alert alert-error'>
                         {props.error}
                     </div>
+                </div>
+            )}
+
+            {successMessage.length > 0 && (
+                <div className="toast toast-top toast-end z-[1000] mt-16">
+                    {successMessage.map((msg) =>(
+                        <div className="alert alert-success" key={msg.id}>
+                            <span>{msg.message}</span>
+                        </div>
+                    ))}
                 </div>
             )}
 
