@@ -18,6 +18,7 @@ class StripeController extends Controller
     public function success(Request $request) 
     {
         $user = auth()->user();
+       
         
         $session_id = $request->get('session_id');
         $orders = Order::where('stripe_session_id', $session_id)
@@ -79,7 +80,13 @@ class StripeController extends Controller
                 $balanceTransaction = $stripe->balanceTransactions->retrieve($transactionId);
 
                 $orders = Order::where('payment_intent', $paymentIntent)
+                    ->with('user', 'vendorUser')
                     ->get();
+                    // Check if there are any orders before proceeding
+                if ($orders->isEmpty()) {
+                    Log::error('No orders found for payment intent: ' . $paymentIntent);
+                    break;
+                }
                 $totalAmount = $balanceTransaction['amount'];
                 $stripeFee = 0;
                 foreach ($balanceTransaction['fee_details'] as $fee_detail) {
@@ -99,11 +106,20 @@ class StripeController extends Controller
 
                     $order->save();
                     //Todo send email to vendor
-                    Mail::to($order->vendorUser)->send(new NewOrderMail($order));
+                    if ($order->vendorUser) {
+                        Mail::to($order->vendorUser)->send(new NewOrderMail($order));
+                    }
                 }
                 // Send email to buyer
-                Mail::to($order[0]->user)->send(new CheckoutCompleted($orders));
-
+                if ($orders->isNotEmpty() && $orders[0]->user) {
+                    Mail::to($orders[0]->user)->send(new CheckoutCompleted($orders));
+                } else {
+                    Log::error('Failed to send checkout email: No orders or user not found', [
+                        'payment_intent' => $paymentIntent,
+                        'orders_count' => $orders->count(),
+                    ]);
+                }
+                break;
             case 'checkout.session.completed':
                 $session = $event->data->object;
                 $pi = $session['payment_intent'];

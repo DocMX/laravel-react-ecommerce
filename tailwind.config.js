@@ -1,3 +1,4 @@
+import themes from 'daisyui/theme/object';
 import defaultTheme from 'tailwindcss/defaultTheme';
 //import forms from '@tailwindcss/forms';
 
@@ -16,6 +17,18 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
         },
+    },
+
+    daisyui: {
+        themes: [
+            "light", // Usa el tema 'light' directamente sin necesidad de importar nada
+            {
+                mytheme: {
+                    "primary": "#6936FS", // Personaliza los colores
+                    "secondary": "#ff00ff",
+                },
+            },
+        ],
     },
 
     plugins: [require('daisyui')],
