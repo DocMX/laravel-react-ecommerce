@@ -178,5 +178,7 @@ class StripeController extends Controller
         if (!$user->isStripeAccountActive()) {
             return redirect(!$user->getStripeAccountLink());
         }
+
+        return back()->with('success','Your account is already connected.');
     }
 }
