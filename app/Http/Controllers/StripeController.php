@@ -12,12 +12,13 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class StripeController extends Controller
 {
     public function success(Request $request) 
     {
-        $user = auth()->user();
+        $user = Auth::user();
        
         
         $session_id = $request->get('session_id');
@@ -166,4 +167,16 @@ class StripeController extends Controller
         return response('', 200);
     }
     
+    public function connect ()
+    {
+        $user = Auth::user(); 
+
+        if (!$user->getStripeAccountId()) {
+            $user->createStripeAccount(['type' => 'express']);
+        }
+
+        if (!$user->isStripeAccountActive()) {
+            return redirect(!$user->getStripeAccountLink());
+        }
+    }
 }
