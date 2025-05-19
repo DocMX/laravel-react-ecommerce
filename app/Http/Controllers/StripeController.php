@@ -106,20 +106,13 @@ class StripeController extends Controller
 
                     $order->save();
                     //Todo send email to vendor
-                    if ($order->vendorUser) {
+                    
                         Mail::to($order->vendorUser)->send(new NewOrderMail($order));
-                    }
+                    
                 }
-                // Send email to buyer
-                if ($orders->isNotEmpty() && $orders[0]->user) {
+          
                     Mail::to($orders[0]->user)->send(new CheckoutCompleted($orders));
-                } else {
-                    Log::error('Failed to send checkout email: No orders or user not found', [
-                        'payment_intent' => $paymentIntent,
-                        'orders_count' => $orders->count(),
-                    ]);
-                }
-                break;
+                
             case 'checkout.session.completed':
                 $session = $event->data->object;
                 $pi = $session['payment_intent'];

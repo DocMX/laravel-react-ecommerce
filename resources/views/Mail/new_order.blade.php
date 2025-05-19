@@ -1,8 +1,6 @@
 <x-mail::message>
-<h1 style="text-align: cente; font-size: 24px">
-    Congratuations! You hace new Order.
-</h1>
-<x-mail::button :url="$order->id">
+<h1 style="text-align: center; font-size: 24px">Congratuations! You have new Order.</h1>
+<x-mail::button :url="url('/')">
     View Order Details
 </x-mail::button>
 <h3 style="font-size: 20px; margin-bottom: 15px">Order Summary</h3>
