@@ -33,7 +33,7 @@ Make sure you have the proper development environment set up before proceeding.
    - Open `.env` and update database credentials (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`).
 3. **Install backend dependencies**
    ```sh
-   composer install
+   composer install and npm install
    ```
 4. **Generate application key**
    ```sh
