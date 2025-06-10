@@ -7,6 +7,14 @@ export interface User {
     email: string;
     email_verified_at?: string;
     avatar?: string;
+    stripe_account_active: boolean;
+    vendor: {
+        status: string;
+        status_label: string;
+        store_name: string;
+        store_address: string;
+        cover_image: string;
+    }
 }
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
