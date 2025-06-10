@@ -152,7 +152,10 @@ export interface NavItem {
     icon?: LucideIcon | null;
     isActive?: boolean;
 }
-
+export interface Quote {
+    message: string;
+    author: string;
+}
 export interface SharedData {
     csrf_token: string;
     error: string;
@@ -167,5 +170,7 @@ export interface SharedData {
     totalPrice: number;
     totalQuantity: number;
     miniCartItems: CartItem[];
+    name?: string;
+    quote?: Quote;
     [key: string]: unknown;
 }
