@@ -2,7 +2,8 @@ import { Link, usePage } from '@inertiajs/react';
 import MiniCartDropdown from './MiniCartDropdown';
 
 function Navbar() {
-    const {auth, totalPrice, totalQuantity}=usePage().props;
+    //const {auth, totalPrice, totalQuantity}=usePage().props;
+    const {auth}=usePage().props;
     const {user}= auth;
     return (
         <div className="navbar bg-base-100 shadow-sm">

@@ -154,9 +154,18 @@ export interface NavItem {
 }
 
 export interface SharedData {
-    name: string;
-    quote: { message: string; author: string };
-    auth: Auth;
+    csrf_token: string;
+    error: string;
+    success: {
+        message: string;
+        time: number;
+    };
+    auth: {
+        user: User;
+    };
     ziggy: Config & { location: string };
+    totalPrice: number;
+    totalQuantity: number;
+    miniCartItems: CartItem[];
     [key: string]: unknown;
 }
