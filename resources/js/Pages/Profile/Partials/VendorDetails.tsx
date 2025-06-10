@@ -5,15 +5,15 @@ import PrimaryButton from '@/Components/Core/PrimaryButton';
 import InputLabel from '@/Components/Core/InputLabel';
 
 export default function VendorDetails({ className = '' }: { className?: string }) {
-    const [showBecomeVendorConfirmation, SetShowBecomeVendorConfirmation] = useState(false);
+    const [showBecomeVendorConfirmation, setShowBecomeVendorConfirmation] = useState(false);
     const[successMessage, setSuccessMessage]= useState('');
     const user=usePage().props.auth.user;
     const token=usePage().props.csrf_token;
 
     const{
-        data,
+        //data,
         setData,
-        errors,
+        //errors,
         post,
         processing,
         recentlySuccessful,
@@ -59,7 +59,7 @@ export default function VendorDetails({ className = '' }: { className?: string }
     }
 
     const closeModal=()=>{
-        SetShowBecomeVendorConfirmation(false);
+        setShowBecomeVendorConfirmation(false);
     }
 
     return(
@@ -84,7 +84,7 @@ export default function VendorDetails({ className = '' }: { className?: string }
 
             <div>
                 {!user.vendor && <PrimaryButton onClick={ev =>
-                 SetShowBecomeVendorConfirmation(true)} disabled={processing}>
+                 setShowBecomeVendorConfirmation(true)} disabled={processing}>
                     Become a Vendor
                 </PrimaryButton>}
 

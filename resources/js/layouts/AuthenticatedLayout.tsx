@@ -1,21 +1,20 @@
 
 import Navbar from '@/Components/App/Navbar';
-import { Link, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react';
 
+
 export default function AuthenticatedLayout({
-   
-    header,
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
     const props= usePage().props;
-    const user = usePage().props.auth.user;
+    //const user = usePage().props.auth.user;
 
     const [successMessage, setSuccessMessages] = useState<any[]>([]);
     const timeoutRefs = useRef<{[key: number]:ReturnType<typeof setTimeout> }>({}); //store timeouts by message ID
     
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
+    //const [showingNavigationDropdown, setShowingNavigationDropdown] =
+    //    useState(false);
 
     useEffect(()=>{
         if (props.success.message) {

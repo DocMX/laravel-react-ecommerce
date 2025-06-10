@@ -120,7 +120,7 @@ function Show({product, variationOptions}:
 
     const renderProductVariationTypes = () => {
         return (
-            product.variationTypes.map((type,i) => (
+            product.variationTypes.map((type) => (
                     <div key={type.id}>
                         
                         {type.type === 'Image' &&
