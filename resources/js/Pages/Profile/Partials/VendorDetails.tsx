@@ -11,9 +11,9 @@ export default function VendorDetails({ className = '' }: { className?: string }
     const token=usePage().props.csrf_token;
 
     const{
-        //data,
+        data,
         setData,
-        //errors,
+        errors,
         post,
         processing,
         recentlySuccessful,
