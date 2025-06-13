@@ -1,5 +1,5 @@
 import ProductItem from '@/Components/App/ProductItem';
-import AuthenticatedLayout from '../Layouts/AuthenticatedLayout';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout' ;
 import { PageProps, PaginationProps, Product } from '@/types';
 import { Head } from '@inertiajs/react';
 
