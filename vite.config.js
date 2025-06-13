@@ -13,7 +13,8 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': '/resources/js',
+            '@': path.resolve(__dirname, './resources/js'),
+            '@/Layouts': path.resolve(__dirname, './resources/js/Layouts')
         },
     },
     optimizeDeps: {

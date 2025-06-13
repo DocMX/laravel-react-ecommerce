@@ -14,6 +14,7 @@
         "baseUrl": ".",
         "paths": {
             "@/*": ["./resources/js/*"],
+            "@/Layouts/*": ["resources/js/Layouts/*"],
             "ziggy-js": ["./vendor/tightenco/ziggy"]
         }
     },
