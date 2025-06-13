@@ -1,11 +1,11 @@
 import { useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler, useState } from 'react';
-import Modal from '@/Components/Core/Modal';
+//import Modal from '@/Components/Core/Modal';
 import PrimaryButton from '@/Components/Core/PrimaryButton';
 import InputLabel from '@/Components/Core/InputLabel';
 
 export default function VendorDetails({ className = '' }: { className?: string }) {
-    const [showBecomeVendorConfirmation, setShowBecomeVendorConfirmation] = useState(false);
+    //const [showBecomeVendorConfirmation, setShowBecomeVendorConfirmation] = useState(false);
     const[successMessage, setSuccessMessage]= useState('');
     const user=usePage().props.auth.user;
     const token=usePage().props.csrf_token;
@@ -13,7 +13,7 @@ export default function VendorDetails({ className = '' }: { className?: string }
     const{
         data,
         setData,
-        errors,
+        //errors,
         post,
         processing,
         recentlySuccessful,
@@ -22,45 +22,45 @@ export default function VendorDetails({ className = '' }: { className?: string }
         store_address: user.vendor?.store_address,
     });
 
-    const onStoreNameChange=(ev: React.ChangeEvent<HTMLInputElement>) => 
-    {
-        setData('store_name', ev.target.value.toLocaleLowerCase().replace(/\s+/g,'-'))
-    }
+    //const onStoreNameChange=(ev: React.ChangeEvent<HTMLInputElement>) => 
+    //{
+    //    setData('store_name', ev.target.value.toLocaleLowerCase().replace(/\s+/g,'-'))
+    //}
+//
+    //const becomeVendor: FormEventHandler= (ev)=> {
+    //    ev.preventDefault()
+//
+    //    post(route('vendor.store'),{
+    //        preserveScroll:true,
+    //        onSuccess: () => {
+    //            closeModal()
+    //            setSuccessMessage('You can now create and publish products.')
+    //        },
+    //        onError:(errors)=>{
+//
+    //        },
+    //    })
+    //    
+    //}
 
-    const becomeVendor: FormEventHandler= (ev)=> {
-        ev.preventDefault()
+    //const updateVendor:FormEventHandler = (ev)=>{
+    //    ev.preventDefault()
+    //    post(route('vendor.store'),{
+    //       preserveScroll:true, 
+    //       onSuccess: () => {
+    //            closeModal()
+    //            setSuccessMessage('Your details were updated.')
+    //        },
+    //        onError:(errors)=>{
+//
+    //        },
+    //    })
+    //    
+    //}
 
-        post(route('vendor.store'),{
-            preserveScroll:true,
-            onSuccess: () => {
-                closeModal()
-                setSuccessMessage('You can now create and publish products.')
-            },
-            onError:(errors)=>{
-
-            },
-        })
-        
-    }
-
-    const updateVendor:FormEventHandler = (ev)=>{
-        ev.preventDefault()
-        post(route('vendor.store'),{
-           preserveScroll:true, 
-           onSuccess: () => {
-                closeModal()
-                setSuccessMessage('Your details were updated.')
-            },
-            onError:(errors)=>{
-
-            },
-        })
-        
-    }
-
-    const closeModal=()=>{
-        setShowBecomeVendorConfirmation(false);
-    }
+    //const closeModal=()=>{
+    //    setShowBecomeVendorConfirmation(false);
+    //}
 
     return(
         <section className={className}>
@@ -82,20 +82,23 @@ export default function VendorDetails({ className = '' }: { className?: string }
                 </h2>
             </header>
 
-            <div>
-                {!user.vendor && <PrimaryButton onClick={ev =>
-                 setShowBecomeVendorConfirmation(true)} disabled={processing}>
-                    Become a Vendor
-                </PrimaryButton>}
-
-                {user.vendor && (
-                    <>
-                        <form onSubmit={updateVendor}>
-                            <InputLabel htmlFor='name' value='Store Name' />
-                        </form>
-                    </>
-                )}
-            </div>
+           
         </section>
     );
 }
+
+
+            //<div>
+            //   {!user.vendor && <PrimaryButton onClick={ev =>
+            //     setShowBecomeVendorConfirmation(true)} disabled={processing}>
+            //        Become a Vendor
+            //    </PrimaryButton>}
+//
+            //    {user.vendor && (
+            //        <>
+            //            <form onSubmit={updateVendor}>
+            //                <InputLabel htmlFor='name' value='Store Name' />
+            //            </form>
+            //        </>
+            //    )}
+            //</div>
