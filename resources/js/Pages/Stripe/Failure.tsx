@@ -1,6 +1,6 @@
 import { Head, Link } from "@inertiajs/react";
 import { XCircleIcon } from "lucide-react";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout';
 
 export default function Failure() {
   return (

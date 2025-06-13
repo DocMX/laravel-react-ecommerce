@@ -1,7 +1,7 @@
 import CartItem from '@/Components/App/CartItem';
 import CurrencyFormatter from '@/Components/Core/CurrencyFormatter';
 import PrimaryButton from '@/Components/Core/PrimaryButton';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout';
 import { GroupedCartItems, PageProps } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { CreditCardIcon } from 'lucide-react';
