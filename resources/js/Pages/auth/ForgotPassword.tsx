@@ -1,7 +1,7 @@
 import { FormEventHandler } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
 import TextInput from '@/Components/Core/TextInput';
 import InputError from '@/Components/Core/InputError';
 import PrimaryButton from '@/Components/Core/PrimaryButton';

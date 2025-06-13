@@ -11,12 +11,12 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "noEmit": true,
-        "baseUrl": ".",
         "paths": {
             "@/*": ["./resources/js/*"],
-            "@/Layouts/*": ["resources/js/Layouts/*"],
-            "ziggy-js": ["./vendor/tightenco/ziggy"]
+            "ziggy-js": ["./node_modules/ziggy-js"],
+            "../../vendor/tightenco/ziggy": ["./vendor/tightenco/ziggy/dist/index.d.ts"]
         }
     },
+    "types": ["vite/client", "ziggy-js"],
     "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx", "resources/js/**/*.d.ts"]
 }
