@@ -1,7 +1,7 @@
 import {Head, Link} from "@inertiajs/react";
 import CurrencyFormatter from "@/Components/Core/CurrencyFormatter";
 import { CheckCircleIcon } from "lucide-react";
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout' ;
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps, Order } from "@/types";
 
 export default function Success({orders}: PageProps<{orders: Order[]}>) {
