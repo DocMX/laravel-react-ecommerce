@@ -4,7 +4,7 @@ import { arraysAreEqual } from '@/helpers';
 import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
 import { Product, VariationTypeOption } from '@/types';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback ,useEffect, useMemo, useState } from 'react';
 
 function Show({product, variationOptions}: 
     {product:Product, variationOptions:number[]}) {
@@ -25,7 +25,7 @@ function Show({product, variationOptions}:
         useState<Record<number, VariationTypeOption>>([]);
 
     const images = useMemo(() =>{
-        for (let typeId in selectedOptions){
+        for (const typeId in selectedOptions){
             const option = selectedOptions[typeId];
             if (option.images.length > 0) return option.images;
         }
@@ -40,7 +40,7 @@ function Show({product, variationOptions}:
             (selectedOptions)
                 .map(op => op.id)
                 .sort();
-        for (let variation of product.variations){
+        for (const variation of product.variations){
             const optionIds = (variation.variation_type_option_ids)
             ? [...variation.variation_type_option_ids].sort()
             : [];
@@ -59,25 +59,13 @@ function Show({product, variationOptions}:
     },[product, selectedOptions]);
 
    
-    useEffect(() =>{
-        for (let type of product.variationTypes){
-            const selectedOptionsId: number = variationOptions[type.id];
-            
-            chooseOption(
-                type.id,
-                type.options.find(op => op.id == selectedOptionsId) || type.options[0],
-                false
-            )
-        }
-    }, [variationOptions, product.variationTypes]);
-   
-    const getOptionIdsMap = (newOptions: object) =>{
+    const getOptionIdsMap = useCallback((newOptions: Record<number, VariationTypeOption>) =>{
         return Object.fromEntries(
             Object.entries(newOptions).map(([a, b]) => [a, b.id])
         )
-    }
+    }, []);
 
-    const chooseOption = (
+    const chooseOption = useCallback((
         typeId: number,
         option: VariationTypeOption,
         updateRouter: boolean = true
@@ -99,8 +87,19 @@ function Show({product, variationOptions}:
             
             return newOptions
         })
-       
-    }
+    }, [url, getOptionIdsMap]);
+
+    useEffect(() =>{
+        for (const type of product.variationTypes){
+            const selectedOptionsId: number = variationOptions[type.id];
+            
+            chooseOption(
+                type.id,
+                type.options.find(op => op.id == selectedOptionsId) || type.options[0],
+                false
+            )
+        }
+    }, [variationOptions, product.variationTypes, chooseOption]);
 
     const onQuantityChange = 
         (ev: React.ChangeEvent<HTMLSelectElement>) =>{
@@ -196,7 +195,7 @@ function Show({product, variationOptions}:
         )
         //console.log(idsMap)
         form.setData('option_ids', idsMap)
-    }, [selectedOptions]);
+    }, [selectedOptions, form.setData]);
 
     return (
         <AuthenticatedLayout>

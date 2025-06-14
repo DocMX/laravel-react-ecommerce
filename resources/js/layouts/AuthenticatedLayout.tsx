@@ -2,7 +2,10 @@
 import Navbar from '@/Components/App/Navbar';
 import { usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react';
-
+interface SuccessMessage {
+  id: number;
+  message: string;
+}
 
 export default function AuthenticatedLayout({
     children,
@@ -10,7 +13,7 @@ export default function AuthenticatedLayout({
     const props= usePage().props;
     //const user = usePage().props.auth.user;
 
-    const [successMessage, setSuccessMessages] = useState<any[]>([]);
+    const [successMessage, setSuccessMessages] = useState<SuccessMessage[]>([]);
     const timeoutRefs = useRef<{[key: number]:ReturnType<typeof setTimeout> }>({}); //store timeouts by message ID
     
     //const [showingNavigationDropdown, setShowingNavigationDropdown] =

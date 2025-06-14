@@ -24,4 +24,3 @@ declare module 'ziggy-js' {
   export default route;
   export { Config };
 }
-
