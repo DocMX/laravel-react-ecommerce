@@ -176,6 +176,7 @@ export interface SharedData {
     [key: string]: unknown;
 }
 
+// Extensión global
 declare global {
   interface Window {
     axios: AxiosInstance;
@@ -186,8 +187,33 @@ declare global {
       <T extends ValidRouteName>(name: T, params?: ParameterValue, absolute?: boolean, config?: Config): string;
     };
   }
+
+  // Para SSR (Node.js)
+  const route: typeof window.route;
 }
 
+// Extensión de Inertia
 declare module '@inertiajs/core' {
-  interface PageProps extends InertiaPageProps, AppPageProps {}
+  interface PageProps extends InertiaPageProps {
+    csrf_token: string;
+    error: string;
+    success: {
+      message: string;
+      time: number;
+    };
+    auth: {
+      user: User;
+    };
+    ziggy: Config & { location: string };
+    totalPrice: number;
+    totalQuantity: number;
+    miniCartItems: CartItem[];
+  }
+}
+
+// Tipos exportables
+export interface SharedData extends PageProps {
+  name?: string;
+  quote?: Quote;
+  [key: string]: unknown;
 }

@@ -15,7 +15,7 @@ export default [
         languageOptions: {
             globals: {
                 ...globals.browser,
-                ...globals.node // Añadir globals de Node para SSR
+                ...globals.node, // Añadir globals de Node para SSR
             },
         },
         rules: {
@@ -23,11 +23,16 @@ export default [
             'react/prop-types': 'off',
             'react/no-unescaped-entities': 'off',
             'no-var': 'error',
-            '@typescript-eslint/no-explicit-any': ['error', {
-                'fixToUnknown': true,
-                'ignoreRestArgs': false
-            }]
+            'no-undef': 'off',
+            '@typescript-eslint/no-explicit-any': [
+                'error',
+                {
+                    fixToUnknown: true,
+                    ignoreRestArgs: false,
+                },
+            ],
         },
+
         settings: {
             react: {
                 version: 'detect',
