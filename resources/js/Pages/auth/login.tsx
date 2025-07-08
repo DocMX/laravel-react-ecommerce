@@ -6,6 +6,7 @@ import TextInput from '@/Components/Core/TextInput';
 import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { FaSpinner } from 'react-icons/fa'; 
 
 export default function Login({ status, canResetPassword }: { status?: string; canResetPassword: boolean }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -16,7 +17,6 @@ export default function Login({ status, canResetPassword }: { status?: string; c
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
         post(route('login'), {
             onFinish: () => reset('password'),
         });
@@ -44,6 +44,7 @@ export default function Login({ status, canResetPassword }: { status?: string; c
                                     autoComplete="username"
                                     isFocused={true}
                                     onChange={(e) => setData('email', e.target.value)}
+                                    disabled={processing} 
                                 />
 
                                 <InputError message={errors.email} className="mt-2" />
@@ -60,6 +61,7 @@ export default function Login({ status, canResetPassword }: { status?: string; c
                                     className="mt-1 block w-full"
                                     autoComplete="current-password"
                                     onChange={(e) => setData('password', e.target.value)}
+                                    disabled={processing}
                                 />
 
                                 <InputError message={errors.password} className="mt-2" />
@@ -71,6 +73,7 @@ export default function Login({ status, canResetPassword }: { status?: string; c
                                         name="remember"
                                         checked={data.remember}
                                         onChange={(e) => setData('remember', (e.target.checked || false) as false)}
+                                        disabled={processing}
                                     />
                                     <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
                                 </label>
@@ -78,13 +81,23 @@ export default function Login({ status, canResetPassword }: { status?: string; c
 
                             <div className="mt-4 flex items-center justify-end">
                                 {canResetPassword && (
-                                    <Link href={route('password.request')} className="link">
+                                    <Link 
+                                        href={route('password.request')} 
+                                        className="link"
+                                        disabled={processing} 
+                                    >
                                         Forgot your password?
                                     </Link>
                                 )}
 
-                                <PrimaryButton className="ms-4" disabled={processing}>
-                                    Log in
+                                <PrimaryButton 
+                                    className="ms-4 flex items-center justify-center gap-2" 
+                                    disabled={processing}
+                                >
+                                    {processing && (
+                                        <FaSpinner className="animate-spin" />
+                                    )}
+                                    {processing ? 'Processing...' : 'Log in'}
                                 </PrimaryButton>
                             </div>
                         </form>
