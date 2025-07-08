@@ -88,7 +88,7 @@ function Show({product, variationOptions}:
             return newOptions
         })
     }, [url, getOptionIdsMap]);
-
+    const { setData } = form;  // agregue y dividi el form.setData debido al Lint
     useEffect(() =>{
         for (const type of product.variationTypes){
             const selectedOptionsId: number = variationOptions[type.id];
@@ -194,8 +194,9 @@ function Show({product, variationOptions}:
                 [string, VariationTypeOption]) => [typeId,option.id])
         )
         //console.log(idsMap)
-        form.setData('option_ids', idsMap)
-    }, [selectedOptions, form.setData]);
+        setData('option_ids', idsMap)
+        
+    }, [selectedOptions, setData]);
 
     return (
         <AuthenticatedLayout>

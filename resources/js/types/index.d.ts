@@ -1,5 +1,6 @@
-import { Config } from 'ziggy-js';
+import {  Config, RouteParams, ValidRouteName, Router, ParameterValue } from 'ziggy-js';
 import { LucideIcon } from 'lucide-react';
+
 
 export interface User {
     id: number;
@@ -173,4 +174,20 @@ export interface SharedData {
     name?: string;
     quote?: Quote;
     [key: string]: unknown;
+}
+
+declare global {
+  interface Window {
+    axios: AxiosInstance;
+    Ziggy: Config;
+    route: {
+      (): Router;
+      <T extends ValidRouteName>(name: T, params?: RouteParams<T>, absolute?: boolean, config?: Config): string;
+      <T extends ValidRouteName>(name: T, params?: ParameterValue, absolute?: boolean, config?: Config): string;
+    };
+  }
+}
+
+declare module '@inertiajs/core' {
+  interface PageProps extends InertiaPageProps, AppPageProps {}
 }

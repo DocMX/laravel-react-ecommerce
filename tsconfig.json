@@ -15,8 +15,9 @@
             "@/*": ["./resources/js/*"],
             "ziggy-js": ["./node_modules/ziggy-js"],
             "../../vendor/tightenco/ziggy": ["./vendor/tightenco/ziggy/dist/index.d.ts"]
-        }
+        },
+        "types": ["vite/client", "ziggy-js", "./resources/js/types/global"]
     },
-    "types": ["vite/client", "ziggy-js"],
-    "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx", "resources/js/**/*.d.ts"]
+    
+    "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx", "resources/js/**/*.d.ts","resources/js/types"]
 }

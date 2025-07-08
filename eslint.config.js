@@ -11,16 +11,22 @@ export default [
     ...typescript.configs.recommended,
     {
         ...react.configs.flat.recommended,
-        ...react.configs.flat['jsx-runtime'], // Required for React 17+
+        ...react.configs.flat['jsx-runtime'],
         languageOptions: {
             globals: {
                 ...globals.browser,
+                ...globals.node // Añadir globals de Node para SSR
             },
         },
         rules: {
             'react/react-in-jsx-scope': 'off',
             'react/prop-types': 'off',
             'react/no-unescaped-entities': 'off',
+            'no-var': 'error',
+            '@typescript-eslint/no-explicit-any': ['error', {
+                'fixToUnknown': true,
+                'ignoreRestArgs': false
+            }]
         },
         settings: {
             react: {
@@ -40,5 +46,5 @@ export default [
     {
         ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'tailwind.config.js'],
     },
-    prettier, // Turn off all rules that might conflict with Prettier
+    prettier,
 ];
