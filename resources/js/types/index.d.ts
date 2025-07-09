@@ -85,6 +85,8 @@ export type Product = {
     images:Image[];
     short_description: string;
     description: string;
+    has_variations: boolean;
+    in_stock: boolean;
     user: {
         id: number;
         name : string;

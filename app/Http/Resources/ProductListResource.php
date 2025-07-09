@@ -23,6 +23,10 @@ class ProductListResource extends JsonResource
             'price' => $this->price,
             'quantity' => $this->quantity,
             'image' => $this->getFirstMediaUrl('images', 'small'),
+            'has_variations' => $this->variations()->exists(), // Solo indica si tiene variaciones
+            'in_stock' => $this->variations()->exists() 
+                ? $this->variations()->where('quantity', '>', 0)->exists()
+                : $this->quantity > 0,
             'user' => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,

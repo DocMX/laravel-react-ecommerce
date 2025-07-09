@@ -5,7 +5,7 @@ import TextInput from '@/Components/Core/TextInput';
 import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
-import { FaSpinner } from 'react-icons/fa'; // Importamos el spinner de react-icons
+import { FaSpinner } from 'react-icons/fa';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -42,7 +42,7 @@ export default function Register() {
                                     isFocused={true}
                                     onChange={(e) => setData('name', e.target.value)}
                                     required
-                                    disabled={processing} // Deshabilitado durante el procesamiento
+                                    disabled={processing}
                                 />
 
                                 <InputError message={errors.name} className="mt-2" />
@@ -60,7 +60,7 @@ export default function Register() {
                                     autoComplete="username"
                                     onChange={(e) => setData('email', e.target.value)}
                                     required
-                                    disabled={processing} // Deshabilitado durante el procesamiento
+                                    disabled={processing} 
                                 />
 
                                 <InputError message={errors.email} className="mt-2" />
@@ -78,7 +78,7 @@ export default function Register() {
                                     autoComplete="new-password"
                                     onChange={(e) => setData('password', e.target.value)}
                                     required
-                                    disabled={processing} // Deshabilitado durante el procesamiento
+                                    disabled={processing}
                                 />
 
                                 <InputError message={errors.password} className="mt-2" />
@@ -96,7 +96,7 @@ export default function Register() {
                                     autoComplete="new-password"
                                     onChange={(e) => setData('password_confirmation', e.target.value)}
                                     required
-                                    disabled={processing} // Deshabilitado durante el procesamiento
+                                    disabled={processing}
                                 />
 
                                 <InputError message={errors.password_confirmation} className="mt-2" />
@@ -106,14 +106,14 @@ export default function Register() {
                                 <Link
                                     href={route('login')}
                                     className="link"
-                                    disabled={processing} // Opcional: puedes manejar esto con CSS
+                                    disabled={processing}
                                 >
                                     Already registered?
                                 </Link>
 
                                 <PrimaryButton className="ms-4 flex items-center justify-center gap-2" disabled={processing}>
                                     {processing && (
-                                        <FaSpinner className="animate-spin" /> // Spinner animado
+                                        <FaSpinner className="animate-spin" />
                                     )}
                                     {processing ? 'Processing...' : 'Register'}
                                 </PrimaryButton>
