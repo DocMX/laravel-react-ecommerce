@@ -31,7 +31,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     ziggy: Config & { location: string };
     totalPrice: number;
     totalQuantity: number;
-    miniCartItems:CartItem[]
+    miniCartItems:CartItem[];
 };
 
 export type CartItem = {
@@ -210,6 +210,7 @@ declare module '@inertiajs/core' {
     totalPrice: number;
     totalQuantity: number;
     miniCartItems: CartItem[];
+   
   }
 }
 

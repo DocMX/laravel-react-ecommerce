@@ -13,8 +13,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;
-    
-    public function registerMediaConversions( $media = null): void
+
+    public function registerMediaConversions($media = null): void
     {
         $this->addMediaConversion('thumb')
             ->width(100);
@@ -28,16 +28,16 @@ class Product extends Model implements HasMedia
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function scopeForVendor(Builder $query) : Builder
+    public function scopeForVendor(Builder $query): Builder
     {
         return $query->where('created_by', auth()->user()->id);
     }
 
-    public function scopePublished(Builder $query) : Builder
+    public function scopePublished(Builder $query): Builder
     {
-        return $query->where('status', ProductStatusEnum::Published );
+        return $query->where('status', ProductStatusEnum::Published);
     }
-    public function scopeForWebsite(Builder $query) : Builder
+    public function scopeForWebsite(Builder $query): Builder
     {
         return $query->published();
     }
@@ -60,7 +60,7 @@ class Product extends Model implements HasMedia
 
     public function variations(): HasMany
     {
-        return $this->hasMany(ProductVariation::class , 'product_id');
+        return $this->hasMany(ProductVariation::class, 'product_id');
     }
 
     public function getPriceForOptions($optionIds = [])
@@ -85,14 +85,21 @@ class Product extends Model implements HasMedia
             $options = VariationTypeOption::whereIn('id', $optionIds)->get();
 
             foreach ($options as $option) {
-                $image = $option->getFirstMediaUrl('image','small');
+                $image = $option->getFirstMediaUrl('image', 'small');
                 if ($image) {
                     return $image;
                 }
             }
         }
 
-        return $this->getFirstMediaUrl('images','small');
+        return $this->getFirstMediaUrl('images', 'small');
     }
 
+    public function scopeFilterByCategory($query, $categoryId)
+    {
+        if ($categoryId) {
+            return $query->where('category_id', $categoryId);
+        }
+        return $query;
+    }
 }
