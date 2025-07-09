@@ -3,26 +3,14 @@ import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
 import { PageProps, PaginationProps, Product } from '@/types';
 import { Head } from '@inertiajs/react';
 import Footer from '@/Components/App/Footer';
+import Banner from '@/Components/App/Banner';
+
 
 export default function Home({ products }: PageProps<{ products: PaginationProps<Product> }>) {
     return (
         <AuthenticatedLayout>
             <Head title="Home" />
-
-            {/* Hero Section */}
-            <section className="relative flex h-[500px] items-center justify-center overflow-hidden bg-gray-900 text-white">
-                <div className="absolute inset-0 bg-black opacity-50"></div>
-                <div className="absolute inset-0 bg-[url('https://demo.larastore.io/images/hero-bg.jpg')] bg-cover bg-center"></div>
-
-                <div className="relative z-10 max-w-4xl px-4 text-center">
-                    <h1 className="mb-6 text-4xl font-bold md:text-6xl">Premium Products for Your Lifestyle</h1>
-                    <p className="mb-8 text-xl md:text-2xl">Discover the best deals on high-quality products curated just for you.</p>
-                    <button className="rounded-full bg-indigo-600 px-8 py-3 text-lg font-medium transition duration-300 hover:bg-indigo-700">
-                        Shop Now
-                    </button>
-                </div>
-            </section>
-
+            <Banner />
             {/* Latest Products */}
             <section className="px-6 py-12">
                 <div className="mx-auto max-w-7xl">
@@ -41,7 +29,7 @@ export default function Home({ products }: PageProps<{ products: PaginationProps
                 </div>
             </section>
 
-            {/* Banner Section */}
+            {/* Discount Section */}
             <section className="bg-indigo-600 px-6 py-16 text-white">
                 <div className="mx-auto max-w-7xl text-center">
                     <h2 className="mb-6 text-3xl font-bold md:text-4xl">Summer Sale - Up to 50% Off</h2>
