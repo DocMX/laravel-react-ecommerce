@@ -2,6 +2,7 @@ import ProductItem from '@/Components/App/ProductItem';
 import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
 import { PageProps, PaginationProps, Product } from '@/types';
 import { Head } from '@inertiajs/react';
+import Footer from '@/Components/App/Footer';
 
 export default function Home({ products }: PageProps<{ products: PaginationProps<Product> }>) {
     return (
@@ -99,6 +100,7 @@ export default function Home({ products }: PageProps<{ products: PaginationProps
                     </div>
                 </div>
             </section>
+            <Footer />
         </AuthenticatedLayout>
     );
 }
