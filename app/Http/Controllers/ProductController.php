@@ -22,7 +22,7 @@ class ProductController extends Controller
 
         $query = Product::query()
             ->forWebsite()
-            ->with(['category', 'media']) // Carga relaciones necesarias
+            ->with(['category', 'media'])
             ->when($request->category, function ($query, $category) {
                 $query->filterByCategory($category);
             })
@@ -75,12 +75,6 @@ class ProductController extends Controller
                 break;
             case 'price_desc':
                 $query->orderBy('price', 'desc');
-                break;
-            case 'popular':
-                $query->orderBy('views', 'desc');
-                break;
-            case 'rating':
-                $query->orderBy('rating', 'desc');
                 break;
             default:
                 $query->latest();

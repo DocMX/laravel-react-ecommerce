@@ -177,6 +177,12 @@ export interface SharedData {
     quote?: Quote;
     [key: string]: unknown;
 }
+interface Filters {
+    search: string;
+    category: string;
+    priceRange: string;
+    sort: string;
+}
 
 // Extensión global
 declare global {

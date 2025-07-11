@@ -22,10 +22,10 @@ export default function Home({
     };
 }>) {
     const [filters, setFilters] = useState({
-        search: initialFilters?.search || '',
-        category: initialFilters?.category || '',
-        priceRange: initialFilters?.priceRange || '',
-        sort: initialFilters?.sort || 'latest',
+        search: initialFilters?.search ?? '',
+        category: initialFilters?.category ?? '',
+        priceRange: initialFilters?.priceRange ?? '',
+        sort: initialFilters?.sort ?? 'latest',
     });
 
     const [isLoading, setIsLoading] = useState(false);
@@ -93,12 +93,12 @@ export default function Home({
                         <div className="flex w-full flex-wrap items-center justify-end gap-4">
                             <select
                                 className="rounded-lg border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                                value={filters.category || ''} 
+                                value={filters.category ?? ''} 
                                 onChange={(e) => handleFilterChange('category', e.target.value)}
                             >
                                 <option value="">All Categories</option>
                                 {categories.map((category) => (
-                                    <option key={category.id} value={category.id}>
+                                    <option key={category.id} value={String(category.id)}>
                                         {category.name}
                                     </option>
                                 ))}
@@ -111,8 +111,6 @@ export default function Home({
                                 <option value="latest">Latest</option>
                                 <option value="price_asc">Price: Low to High</option>
                                 <option value="price_desc">Price: High to Low</option>
-                                <option value="popular">Most Popular</option>
-                                <option value="rating">Top Rated</option>
                             </select>
 
                             {/* Rango de precios */}
