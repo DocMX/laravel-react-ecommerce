@@ -39,11 +39,11 @@ export default function Home({
         setIsLoading(false);
     };
 
-    const handleFilterChange = (name: string, value: string) => {
-        const newFilters = { ...filters, [name]: value };
+    const handleFilterChange = (title: string, value: string) => {
+        const newFilters = { ...filters, [title]: value };
         setFilters(newFilters);
 
-        if (name === 'search') {
+        if (title === 'search') {
             setIsLoading(true);
             router.get(route('home'), newFilters, {
                 preserveState: true,
@@ -91,11 +91,9 @@ export default function Home({
 
                         {/* Filtros */}
                         <div className="flex w-full flex-wrap items-center justify-end gap-4">
-                            {/* Filtro por categoría */}
-                            {/* Filtro por categoría */}
                             <select
                                 className="rounded-lg border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                                value={filters.category || ''} // Asegura un string vacío si es undefined
+                                value={filters.category || ''} 
                                 onChange={(e) => handleFilterChange('category', e.target.value)}
                             >
                                 <option value="">All Categories</option>
@@ -105,11 +103,9 @@ export default function Home({
                                     </option>
                                 ))}
                             </select>
-
-                            {/* Ordenar por */}
                             <select
                                 className="rounded-lg border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                                value={filters.sort || 'latest'} // Valor por defecto 'latest'
+                                value={filters.sort || 'latest'}
                                 onChange={(e) => handleFilterChange('sort', e.target.value)}
                             >
                                 <option value="latest">Latest</option>
@@ -122,7 +118,7 @@ export default function Home({
                             {/* Rango de precios */}
                             <select
                                 className="rounded-lg border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                                value={filters.priceRange || ''} // Asegura un string vacío si es undefined
+                                value={filters.priceRange || ''}
                                 onChange={(e) => handleFilterChange('priceRange', e.target.value)}
                             >
                                 <option value="">All Prices</option>
@@ -152,8 +148,6 @@ export default function Home({
                     </div>
                 </div>
             </section>
-
-            {/* Latest Products */}
             <section className="px-6 py-12">
                 <div className="mx-auto max-w-7xl">
                     <div className="mb-8 flex items-center justify-between">

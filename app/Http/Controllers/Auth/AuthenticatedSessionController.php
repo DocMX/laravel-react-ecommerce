@@ -43,7 +43,7 @@ class AuthenticatedSessionController extends Controller
             $cartService->moveCartItemsToDatabase($user->id);
             return Inertia::location(route(name:'filament.admin.pages.dashboard'));
         } else {
-            $route = route ('dashboard', absolute:false);
+            $route = route ('home', absolute:false);
         } 
 
         $cartService->moveCartItemsToDatabase($user->id);

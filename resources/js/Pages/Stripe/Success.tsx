@@ -67,7 +67,7 @@ export default function Success({orders}: PageProps<{orders: Order[]}>) {
               <Link href="#" className="btn btn-primary">
                 View Order Details
               </Link>
-              <Link href={route('dashboard')} className="btn">
+              <Link href={route('home')} className="btn">
                 Back to Home
               </Link>
             </div>
