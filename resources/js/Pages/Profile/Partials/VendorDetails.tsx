@@ -11,13 +11,13 @@ export default function VendorDetails({ className = '' }: { className?: string }
     const [showBecomeVendorConfirmation, SetShowBecomeVendorConfirmation] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const user = usePage().props.auth.user;
+    console.log(user, 'ususariio: ');
     const token = usePage().props.csrf_token;
-
     const { data, setData, errors, post, processing, recentlySuccessful } = useForm({
-        store_name: user.vendor?.store_name || user.name,
+        store_name: user.vendor?.store_name || user.name.toLocaleLowerCase().replace(/\s+/g, '-'),
         store_address: user.vendor?.store_address,
     });
-
+    console.log( user.vendor?.store_address ,'user.vendor?.store_address');
     const onStoreNameChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
         setData('store_name', ev.target.value.toLocaleLowerCase().replace(/\s+/g, '-'));
     };
@@ -64,10 +64,12 @@ export default function VendorDetails({ className = '' }: { className?: string }
             <header>
                 <h2 className="dart:text-gray-100 mb-8 flex justify-between text-lg font-medium text-gray-900">
                     Vendor Details
-                    {user.vendor?.status === 'pending' && <span className={'badge badge-warning'}>{user.vendor.status_label}</span>}
-                    {user.vendor?.status === 'rejected' && <span className={'badge badge-error'}>{user.vendor.status_label}</span>}
-                    {user.vendor?.status === 'approved' && <span className={'badge badge-success'}>{user.vendor.status_label}</span>}
+                    {user.vendor?.status === 'Pending' && <span className={'badge badge-warning'}>{user.vendor.status_label}</span>}
+                    {user.vendor?.status === 'Rejected' && <span className={'badge badge-error'}>{user.vendor.status_label}</span>}
+                    {user.vendor?.status === 'Approved' && <span className={'badge badge-success'}>{user.vendor.status_label}</span>}
+                    
                 </h2>
+               
             </header>
 
             <div>
@@ -129,7 +131,6 @@ export default function VendorDetails({ className = '' }: { className?: string }
                     <h2 className='text-lg font-medium text-gray-900 dark:text-gray-100'>
                         Are you sure you want to become a Vendor?
                     </h2>
-
                     <div className='mt-6 flex justify-end'>
                         <SecondaryButton onClick={closeModal}>
                             Cancel
