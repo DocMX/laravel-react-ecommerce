@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Vendor extends Model
 {
     //I added this 
+    protected $appends = ['status_label'];
 
     protected $primaryKey = 'user_id';
 
@@ -22,4 +23,8 @@ class Vendor extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function getStatusLabelAttribute(): string
+{
+    return VendorStatusEnum::from($this->status)->label();
+}
 }

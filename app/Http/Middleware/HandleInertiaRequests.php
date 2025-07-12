@@ -41,7 +41,9 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'crsf_token' => csrf_token(),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user()
+                    ? $request->user()->loadMissing('vendor')  // <- 🔥 Esto es clave
+                    : null,
             ],
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),

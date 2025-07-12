@@ -11,13 +11,12 @@ export default function VendorDetails({ className = '' }: { className?: string }
     const [showBecomeVendorConfirmation, SetShowBecomeVendorConfirmation] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const user = usePage().props.auth.user;
-    console.log(user, 'ususariio: ');
     const token = usePage().props.csrf_token;
     const { data, setData, errors, post, processing, recentlySuccessful } = useForm({
         store_name: user.vendor?.store_name || user.name.toLocaleLowerCase().replace(/\s+/g, '-'),
         store_address: user.vendor?.store_address,
     });
-    console.log( user.vendor?.store_address ,'user.vendor?.store_address');
+    console.log( user ,'user.vendor?.store_address');
     const onStoreNameChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
         setData('store_name', ev.target.value.toLocaleLowerCase().replace(/\s+/g, '-'));
     };
