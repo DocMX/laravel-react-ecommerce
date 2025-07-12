@@ -16,7 +16,6 @@ export default function VendorDetails({ className = '' }: { className?: string }
         store_name: user.vendor?.store_name || user.name.toLocaleLowerCase().replace(/\s+/g, '-'),
         store_address: user.vendor?.store_address,
     });
-    console.log( user ,'user.vendor?.store_address');
     const onStoreNameChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
         setData('store_name', ev.target.value.toLocaleLowerCase().replace(/\s+/g, '-'));
     };
