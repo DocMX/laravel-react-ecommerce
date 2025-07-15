@@ -112,8 +112,6 @@ export default function Home({
                                 <option value="price_asc">Price: Low to High</option>
                                 <option value="price_desc">Price: High to Low</option>
                             </select>
-
-                            {/* Rango de precios */}
                             <select
                                 className="rounded-lg border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                                 value={filters.priceRange || ''}
@@ -149,7 +147,7 @@ export default function Home({
             <section className="px-6 py-12">
                 <div className="mx-auto max-w-7xl">
                     <div className="mb-8 flex items-center justify-between">
-                        <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Latest Products</h2>
+                        <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Products</h2>
                         <a href="#" className="text-indigo-600 hover:underline dark:text-indigo-400">
                             View All
                         </a>

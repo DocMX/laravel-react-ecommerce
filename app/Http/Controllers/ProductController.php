@@ -45,7 +45,7 @@ class ProductController extends Controller
             });
 
         $products = $query->paginate(12)
-            ->withQueryString(); // Mantiene los parámetros de filtro en la paginación
+            ->withQueryString(); 
 
         return Inertia::render('Home', [
             'products' => ProductListResource::collection($products),
@@ -54,7 +54,6 @@ class ProductController extends Controller
         ]);
     }
 
-    // Método para aplicar filtros de precio
     protected function applyPriceFilter($query, $priceRange)
     {
         $range = explode('-', $priceRange);
@@ -66,7 +65,6 @@ class ProductController extends Controller
         }
     }
 
-    // Método para aplicar ordenación
     protected function applySorting($query, $sort)
     {
         switch ($sort) {
@@ -88,4 +86,5 @@ class ProductController extends Controller
             'variationOptions' => request('options', [])
         ]);
     }
+    
 }
