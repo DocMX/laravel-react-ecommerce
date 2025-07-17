@@ -1,7 +1,6 @@
 import { motion, Variants } from 'framer-motion';
 
 function Footer() {
-  // Variantes de animación con tipos correctos
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {

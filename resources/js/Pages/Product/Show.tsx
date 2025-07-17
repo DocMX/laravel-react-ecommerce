@@ -107,7 +107,6 @@ function Show({product, variationOptions}:
     }
     
     const addToCart = () => {
-        //console.log("Opciones seleccionadas antes de añadir al carrito:", form.data.option_ids);
         form.post(route('cart.store', product.id), {
             preserveScroll:true,
             preserveState: true,
@@ -193,7 +192,6 @@ function Show({product, variationOptions}:
             Object.entries(selectedOptions).map(([typeId, option]:
                 [string, VariationTypeOption]) => [typeId,option.id])
         )
-        //console.log(idsMap)
         setData('option_ids', idsMap)
         
     }, [selectedOptions, setData]);

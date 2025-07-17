@@ -73,12 +73,9 @@ export default function Home({
         <AuthenticatedLayout>
             <Head title="Home" />
             <Banner />
-
-            {/* Sección de Filtros */}
             <section className="bg-gray-50 px-6 py-8 dark:bg-gray-800">
                 <div className="mx-auto max-w-7xl">
                     <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-                        {/* Buscador */}
                         <div className="w-full md:w-64">
                             <input
                                 type="text"
@@ -88,7 +85,6 @@ export default function Home({
                                 onChange={(e) => handleFilterChange('search', e.target.value)}
                             />
                         </div>
-
                         {/* Filtros */}
                         <div className="flex w-full flex-wrap items-center justify-end gap-4">
                             <select

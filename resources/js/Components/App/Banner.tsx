@@ -16,7 +16,7 @@ export default function Banner() {
       setCurrentImageIndex((prevIndex) => 
         prevIndex === backgroundImages.length - 1 ? 0 : prevIndex + 1
       );
-    }, 5000); // Cambia cada 5 segundos
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -28,7 +28,6 @@ export default function Banner() {
       transition={{ duration: 0.8 }}
       className="relative flex h-[400px] items-center justify-center overflow-hidden bg-gray-900 text-white"
     >
-      {/* Fondo con efecto parallax y transición */}
       <motion.div
         key={currentImageIndex}
         className="absolute inset-0 bg-cover bg-center"
@@ -45,8 +44,6 @@ export default function Banner() {
       >
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40"></div>
       </motion.div>
-
-      {/* Contenido (igual que antes) */}
       <motion.div
         className="relative z-10 max-w-6xl px-4 text-center"
         initial="hidden"

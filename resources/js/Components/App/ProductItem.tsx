@@ -7,8 +7,6 @@ export default function ProductItem({ product }: { product: Product }) {
         option_ids: {},
         quantity: 1,
     });
-
-    // Usamos los datos del resource directamente
     const hasStock = product.in_stock;
     const hasVariations = product.has_variations;
 
@@ -24,10 +22,9 @@ export default function ProductItem({ product }: { product: Product }) {
         });
     };
 
-    // Obtiene el mensaje de stock apropiado
+
     const getStockMessage = () => {
         if (hasVariations) {
-            // Como no tenemos el conteo exacto, mostramos un mensaje genérico
             return hasStock ? 'Variations available' : 'Out of stock';
         } else {
             return product.quantity > 0 
@@ -40,7 +37,7 @@ export default function ProductItem({ product }: { product: Product }) {
 
     const stockMessage = getStockMessage();
     const isLowStock = hasVariations 
-        ? false // No podemos determinar si hay bajo stock en variaciones con los datos actuales
+        ? false
         : product.quantity > 0 && product.quantity < 10;
 
     return (
@@ -52,7 +49,6 @@ export default function ProductItem({ product }: { product: Product }) {
                         alt={product.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    {/* Overlay cuando está agotado */}
                     {!hasStock && (
                         <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                             <span className="text-white font-bold text-lg">OUT OF STOCK</span>
@@ -106,8 +102,6 @@ export default function ProductItem({ product }: { product: Product }) {
                         )}
                     </button>
                 </div>
-
-                {/* Stock indicator */}
                 {hasStock && (
                     <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                         <span className={isLowStock ? 'text-orange-500' : ''}>
