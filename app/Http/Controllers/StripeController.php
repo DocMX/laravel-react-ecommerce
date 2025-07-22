@@ -48,7 +48,6 @@ class StripeController extends Controller
 
     public function webhook(Request $request)
     {
-        // Validar el webhook rápidamente primero
         $endpoint_secret = config('app.stripe_webhook_secret');
         $payload = $request->getContent();
         $sig_header = $request->header('Stripe-Signature');
@@ -67,7 +66,7 @@ class StripeController extends Controller
             return response('Invalid signature', 400);
         }
 
-        // Manejar el evento de forma asíncrona
+
         dispatch(function () use ($event) {
             $stripe = new \Stripe\StripeClient(config('app.stripe_secret_key'));
 
@@ -85,7 +84,6 @@ class StripeController extends Controller
             }
         });
 
-        // Responde inmediatamente a Stripe
         return response('Webhook received', 200);
     }
 
