@@ -42,7 +42,7 @@ class HandleInertiaRequests extends Middleware
             'crsf_token' => csrf_token(),
             'auth' => [
                 'user' => $request->user()
-                    ? $request->user()->loadMissing('vendor')  // <- 🔥 Esto es clave
+                    ? $request->user()->loadMissing('vendor')
                     : null,
             ],
             'ziggy' => fn () => [

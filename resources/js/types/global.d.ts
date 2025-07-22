@@ -14,7 +14,6 @@ declare global {
     };
   }
 
-  // Para SSR (Node.js)
   const route: Window['route'];
 }
 

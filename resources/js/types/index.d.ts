@@ -184,7 +184,6 @@ interface Filters {
     sort: string;
 }
 
-// Extensión global
 declare global {
   interface Window {
     axios: AxiosInstance;
@@ -195,12 +194,9 @@ declare global {
       <T extends ValidRouteName>(name: T, params?: ParameterValue, absolute?: boolean, config?: Config): string;
     };
   }
-
-  // Para SSR (Node.js)
   const route: typeof window.route;
 }
 
-// Extensión de Inertia
 declare module '@inertiajs/core' {
   interface PageProps extends InertiaPageProps {
     csrf_token: string;
@@ -220,7 +216,6 @@ declare module '@inertiajs/core' {
   }
 }
 
-// Tipos exportables
 export interface SharedData extends PageProps {
   name?: string;
   quote?: Quote;

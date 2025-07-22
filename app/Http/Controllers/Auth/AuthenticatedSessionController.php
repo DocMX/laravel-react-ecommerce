@@ -37,8 +37,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $user = Auth::user();
+        $user = Auth::user()->fresh(); 
         $route = '/';
+        //dd($user->getRoleNames());
         if ($user->hasAnyRole([RolesEnum::Admin,RolesEnum::Vendor])){
             $cartService->moveCartItemsToDatabase($user->id);
             return Inertia::location(route(name:'filament.admin.pages.dashboard'));
