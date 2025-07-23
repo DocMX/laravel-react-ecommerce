@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Stripe\Stripe;
+use Stripe\Account;
 
 class StripeController extends Controller
 {
@@ -204,14 +206,64 @@ class StripeController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user->getStripeAccountId()) {
-            $user->createStripeAccount(['type' => 'express']);
-        }
+        try {
+            Stripe::setApiKey(config('services.stripe.secret'));
 
-        if (!$user->isStripeAccountActive()) {
-            return redirect(!$user->getStripeAccountLink());
-        }
+            if (!$user->stripe_account_id) {
+                // 1. Crear la cuenta Express
+                $account = Account::create([
+                    'type' => 'express',
+                    'email' => $user->email,
+                    'business_profile' => [
+                        'name' => $user->name,
+                    ],
+                    'capabilities' => [
+                        'card_payments' => ['requested' => true],
+                        'transfers' => ['requested' => true],
+                    ],
+                ]);
 
-        return back()->with('success', 'Your account is already connected.');
+                $user->stripe_account_id = $account->id;
+                $user->save();
+
+                // 2. Crear enlace de onboarding (no login link)
+                $accountLink = \Stripe\AccountLink::create([
+                    'account' => $account->id,
+                    'refresh_url' => route('stripe.connect'),
+                    'return_url' => route('filament.admin.pages.dashboard'),
+                    'type' => 'account_onboarding',
+                ]);
+
+                return inertia()->location($accountLink->url);
+            }
+
+            // 3. Si la cuenta existe pero no está activa
+            if (!$user->stripe_account_active) {
+                // Verificar estado de la cuenta primero
+                $account = Account::retrieve($user->stripe_account_id);
+
+                if ($account->details_submitted) {
+                    // Si ya completó onboarding, crear login link
+                    $link = Account::createLoginLink(
+                        $user->stripe_account_id,
+                        ['redirect_url' => route('filament.admin.pages.dashboard')]
+                    );
+                    return inertia()->location($link->url);
+                } else {
+                    // Si no completó onboarding, crear nuevo enlace
+                    $accountLink = \Stripe\AccountLink::create([
+                        'account' => $user->stripe_account_id,
+                        'refresh_url' => route('stripe.connect'),
+                        'return_url' => route('filament.admin.pages.dashboard'),
+                        'type' => 'account_onboarding',
+                    ]);
+                    return inertia()->location($accountLink->url);
+                }
+            }
+
+            return back()->with('success', 'Your account is already connected.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Stripe connection failed: ' . $e->getMessage());
+        }
     }
 }

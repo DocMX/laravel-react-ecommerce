@@ -45,7 +45,8 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/stripe/connect', [StripeController::class, 'connect'])
             ->name('stripe.connect')
-            ->middleware(['role: ' . \App\Enums\RolesEnum::Vendor->value]);
+            ->middleware(['role:' . \App\Enums\RolesEnum::Vendor->value]);
+
             
         Route::get('/stripe/refresh', [StripeController::class, 'refresh'])->name('stripe.refresh');
         Route::get('/stripe/return', [StripeController::class, 'return'])->name('stripe.return');

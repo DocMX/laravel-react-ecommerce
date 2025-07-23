@@ -7,17 +7,30 @@ import InputError from '@/Components/input-error';
 import { useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler, useState } from 'react';
 
+
 export default function VendorDetails({ className = '' }: { className?: string }) {
     const [showBecomeVendorConfirmation, SetShowBecomeVendorConfirmation] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const user = usePage().props.auth.user;
-    const token = usePage().props.csrf_token;
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    console.log('token', token);
     const { data, setData, errors, post, processing, recentlySuccessful } = useForm({
         store_name: user.vendor?.store_name || user.name.toLocaleLowerCase().replace(/\s+/g, '-'),
         store_address: user.vendor?.store_address,
     });
     const onStoreNameChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
         setData('store_name', ev.target.value.toLocaleLowerCase().replace(/\s+/g, '-'));
+    };
+    const connectStripe = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        post(route('stripe.connect'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setSuccessMessage('You are now connected to Stripe.');
+            },
+            onError: () => {},
+        });
     };
 
     const becomeVendor: FormEventHandler = (ev) => {
@@ -65,9 +78,7 @@ export default function VendorDetails({ className = '' }: { className?: string }
                     {user.vendor?.status === 'Pending' && <span className={'badge badge-warning'}>{user.vendor.status_label}</span>}
                     {user.vendor?.status === 'Rejected' && <span className={'badge badge-error'}>{user.vendor.status_label}</span>}
                     {user.vendor?.status === 'Approved' && <span className={'badge badge-success'}>{user.vendor.status_label}</span>}
-                    
                 </h2>
-               
             </header>
 
             <div>
@@ -96,28 +107,24 @@ export default function VendorDetails({ className = '' }: { className?: string }
                             <div className="mb-4">
                                 <InputLabel htmlFor="name" value="Store Address" />
 
-                                <textarea className="textarea textarea-bordered w-full mt-1"
+                                <textarea
+                                    className="textarea-bordered textarea mt-1 w-full"
                                     value={data.store_address}
-                                    onChange={(e)=> setData
-                                        ('store_address', e.target.value)}
-                                    placeholder="Enter Your Store Address"></textarea>
+                                    onChange={(e) => setData('store_address', e.target.value)}
+                                    placeholder="Enter Your Store Address"
+                                ></textarea>
                                 <InputError className="mt-2" message={errors.store_address} />
                             </div>
-                            <div className='flex items-center gap-4'>
+                            <div className="flex items-center gap-4">
                                 <PrimaryButton disabled={processing}>Update</PrimaryButton>
                             </div>
                         </form>
-                        <form action={route('stripe.connect')}
-                            method={'post'}
-                            className={'my-8'}>
-                            <input type="hidden" name="_token" value={token}/>
+                        <form onSubmit={connectStripe} className="my-8">
                             {user.stripe_account_active && (
-                                <div className={'text-center text-gray-600 my-4 text-sm'}>
-                                    You are successfully connected to Stripe
-                                </div>
+                                <div className="my-4 text-center text-sm text-gray-600">You are successfully connected to Stripe</div>
                             )}
-                            <button className='btn btn-primary w-full' disabled={user.stripe_account_active}>
-                                Connect to Stripe
+                            <button type="submit" className="btn btn-primary w-full" disabled={user.stripe_account_active || processing}>
+                                {processing ? 'Processing...' : 'Connect to Stripe'}
                             </button>
                         </form>
                     </>
@@ -125,15 +132,11 @@ export default function VendorDetails({ className = '' }: { className?: string }
             </div>
 
             <Modal show={showBecomeVendorConfirmation} onClose={closeModal}>
-                <form onSubmit={becomeVendor} className='p-8'>
-                    <h2 className='text-lg font-medium text-gray-900 dark:text-gray-100'>
-                        Are you sure you want to become a Vendor?
-                    </h2>
-                    <div className='mt-6 flex justify-end'>
-                        <SecondaryButton onClick={closeModal}>
-                            Cancel
-                        </SecondaryButton>
-                        <PrimaryButton className='ms-3' disabled={processing}>
+                <form onSubmit={becomeVendor} className="p-8">
+                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Are you sure you want to become a Vendor?</h2>
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
+                        <PrimaryButton className="ms-3" disabled={processing}>
                             Confirm
                         </PrimaryButton>
                     </div>
