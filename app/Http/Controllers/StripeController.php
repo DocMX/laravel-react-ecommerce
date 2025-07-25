@@ -18,6 +18,7 @@ use Stripe\Account;
 
 class StripeController extends Controller
 {
+    //funcion para pago correcto
     public function success(Request $request)
     {
         $user = Auth::user();
@@ -27,7 +28,6 @@ class StripeController extends Controller
         $orders = Order::where('stripe_session_id', $session_id)
             ->with(['vendorUser', 'orderItems.product'])
             ->get();
-        //dd($orders );
         if ($orders->count() === 0) {
             abort(404);
         }
