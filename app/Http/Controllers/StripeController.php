@@ -42,7 +42,10 @@ class StripeController extends Controller
             'orders' => OrderViewResource::collection($orders)->collection->toArray(),
         ]);
     }
-
+//funcion oara pago incorrecto
+    //funcion para pago incorrecto
+    //funcion para pago incorrecto
+    //funcion para pago incorrecto      
     public function failure()
     {
         return Inertia::render('Stripe/Failure');
