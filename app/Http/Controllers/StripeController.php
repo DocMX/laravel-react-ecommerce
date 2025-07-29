@@ -269,4 +269,27 @@ class StripeController extends Controller
             return back()->with('error', 'Stripe connection failed: ' . $e->getMessage());
         }
     }
+    //funcion para verificar el estado de la cuenta hechopor copilot checar
+    public function connectStatus()
+    {
+        $user = Auth::user();
+
+        if (!$user->stripe_account_id) {
+            return back()->with('error', 'You have not connected your Stripe account yet.');
+        }
+
+        try {
+            $account = Account::retrieve($user->stripe_account_id);
+
+            if ($account->details_submitted) {
+                $user->stripe_account_active = true;
+                $user->save();
+                return back()->with('success', 'Your Stripe account is active.');
+            } else {
+                return back()->with('warning', 'Your Stripe account is not fully set up yet.');
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to retrieve Stripe account status: ' . $e->getMessage());
+        }
+    }
 }
