@@ -6,31 +6,49 @@ import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 import VendorDetails from './Partials/VendorDetails';
 
-export default function Edit({ mustVerifyEmail, status }: PageProps<{ mustVerifyEmail: boolean; status?: string }>) {
+export default function Edit({
+    mustVerifyEmail,
+    status,
+}: PageProps<{ mustVerifyEmail: boolean; status?: string }>) {
     return (
-        <AuthenticatedLayout header={<h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Profile</h2>}>
+        <AuthenticatedLayout
+            header={
+                <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    Profile Settings
+                </h2>
+            }
+        >
             <Head title="Profile" />
 
-            <div className="py-8">
-                <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 p-4 md:grid-cols-3">
-                    <div className={'space-y-6 col-span-2'}>
-                        <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                            <UpdateProfileInformationForm mustVerifyEmail={mustVerifyEmail} status={status} className="max-w-xl" />
+            <section className="py-10">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                        {/* Left Section - Forms */}
+                        <div className="md:col-span-2 space-y-6">
+                            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-gray-800">
+                                <UpdateProfileInformationForm
+                                    mustVerifyEmail={mustVerifyEmail}
+                                    status={status}
+                                    className="max-w-xl"
+                                />
+                            </div>
+
+                            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-gray-800">
+                                <UpdatePasswordForm className="max-w-xl" />
+                            </div>
+
+                            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-gray-800">
+                                <DeleteUserForm className="max-w-xl" />
+                            </div>
                         </div>
 
-                        <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                            <UpdatePasswordForm className="max-w-xl" />
+                        {/* Right Section - Vendor Details */}
+                        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-gray-800">
+                            <VendorDetails />
                         </div>
-
-                        <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                            <DeleteUserForm className="max-w-xl" />
-                        </div>
-                    </div>
-                    <div className='bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800'>
-                        <VendorDetails />
                     </div>
                 </div>
-            </div>
+            </section>
         </AuthenticatedLayout>
     );
 }
