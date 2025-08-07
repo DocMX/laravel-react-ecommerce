@@ -23,7 +23,6 @@ export default function Edit({
             <section className="py-10">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                        {/* Left Section - Forms */}
                         <div className="md:col-span-2 space-y-6">
                             <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-gray-800">
                                 <UpdateProfileInformationForm
