@@ -7,7 +7,7 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
 
-//Guest routes
+//Guest routes including home, product details, and cart management
 Route::get('/', [ProductController::class, 'home'])->name('home');
 Route::get('/product/{product:slug}', [ProductController::class, 'show'])
     ->name('product.show');
