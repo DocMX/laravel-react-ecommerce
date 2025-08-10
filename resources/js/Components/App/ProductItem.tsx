@@ -2,6 +2,9 @@ import { Product } from '@/types';
 import { Link, useForm } from '@inertiajs/react';
 import CurrencyFormatter from '../Core/CurrencyFormatter';
 
+// This component represents an individual product item in a product listing.
+// It displays product details such as image, title, price, and stock status.
+
 export default function ProductItem({ product }: { product: Product }) {
     const form = useForm({
         option_ids: {},

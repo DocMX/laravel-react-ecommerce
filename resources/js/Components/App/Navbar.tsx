@@ -1,6 +1,9 @@
 import { Link, usePage } from '@inertiajs/react';
 import MiniCartDropdown from './MiniCartDropdown';
 
+// This component renders the navigation bar at the top of the application.
+// It includes links for user authentication and a mini cart dropdown.
+
 function Navbar() {
     //const {auth, totalPrice, totalQuantity}=usePage().props;
     const {auth}=usePage().props;

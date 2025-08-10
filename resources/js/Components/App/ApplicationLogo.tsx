@@ -1,5 +1,8 @@
 import { SVGAttributes } from 'react';
 
+// This component renders the application's logo as an SVG element.
+
+
 export default function ApplicationLogo(props: SVGAttributes<SVGElement>) {
     return (
         <svg

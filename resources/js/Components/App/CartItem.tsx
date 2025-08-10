@@ -5,6 +5,9 @@ import TextInput from "@/Components/Core/TextInput";
 import CurrencyFormatter from "@/Components/Core/CurrencyFormatter";
 import { productRoute } from "@/helpers";
 
+// This component represents an individual item in the shopping cart.
+// It allows users to update the quantity, delete the item, or save it for later.
+
 export default function CartItem({item} : {item: CartItemType}) {
   const deleteForm = useForm({
     option_ids: item.option_ids

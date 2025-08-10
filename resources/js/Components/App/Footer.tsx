@@ -1,5 +1,8 @@
 import { motion, Variants } from 'framer-motion';
 
+// This component renders the footer section of the application with animated elements.
+
+
 function Footer() {
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
