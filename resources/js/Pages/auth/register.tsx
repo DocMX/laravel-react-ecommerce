@@ -17,7 +17,6 @@ export default function Register() {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
         post(route('register'), {
             onFinish: () => reset('password', 'password_confirmation'),
         });
@@ -26,13 +25,32 @@ export default function Register() {
     return (
         <AuthenticatedLayout>
             <Head title="Register" />
-            <div className="p-8">
-                <div className="bg-gray card mx-auto max-w-[600px] shadow">
-                    <div className="card-body">
-                        <form onSubmit={submit}>
-                            <div>
-                                <InputLabel htmlFor="name" value="Name" />
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-6">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden max-w-4xl w-full grid md:grid-cols-2">
+                    
+                    {/* Imagen lateral */}
+                    <div className="hidden md:block bg-gradient-to-br from-purple-500 to-indigo-500 relative">
+                        <img
+                            src="https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&w=800&q=80"
+                            alt="Register illustration"
+                            className="w-full h-full object-cover opacity-90"
+                        />
+                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                            <h1 className="text-white text-3xl font-bold text-center px-4">
+                                Únete a nuestra comunidad
+                            </h1>
+                        </div>
+                    </div>
 
+                    {/* Formulario */}
+                    <div className="p-8">
+                        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+                            Crear cuenta
+                        </h2>
+
+                        <form onSubmit={submit} className="space-y-5">
+                            <div>
+                                <InputLabel htmlFor="name" value="Nombre" />
                                 <TextInput
                                     id="name"
                                     name="name"
@@ -44,13 +62,11 @@ export default function Register() {
                                     required
                                     disabled={processing}
                                 />
-
                                 <InputError message={errors.name} className="mt-2" />
                             </div>
 
-                            <div className="mt-4">
+                            <div>
                                 <InputLabel htmlFor="email" value="Email" />
-
                                 <TextInput
                                     id="email"
                                     type="email"
@@ -60,15 +76,13 @@ export default function Register() {
                                     autoComplete="username"
                                     onChange={(e) => setData('email', e.target.value)}
                                     required
-                                    disabled={processing} 
+                                    disabled={processing}
                                 />
-
                                 <InputError message={errors.email} className="mt-2" />
                             </div>
 
-                            <div className="mt-4">
-                                <InputLabel htmlFor="password" value="Password" />
-
+                            <div>
+                                <InputLabel htmlFor="password" value="Contraseña" />
                                 <TextInput
                                     id="password"
                                     type="password"
@@ -80,13 +94,11 @@ export default function Register() {
                                     required
                                     disabled={processing}
                                 />
-
                                 <InputError message={errors.password} className="mt-2" />
                             </div>
 
-                            <div className="mt-4">
-                                <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
-
+                            <div>
+                                <InputLabel htmlFor="password_confirmation" value="Confirmar contraseña" />
                                 <TextInput
                                     id="password_confirmation"
                                     type="password"
@@ -98,24 +110,26 @@ export default function Register() {
                                     required
                                     disabled={processing}
                                 />
-
                                 <InputError message={errors.password_confirmation} className="mt-2" />
                             </div>
 
-                            <div className="mt-4 flex items-center justify-end">
+                            <div className="flex items-center justify-between">
                                 <Link
                                     href={route('login')}
-                                    className="link"
+                                    className="text-sm text-purple-600 hover:underline"
                                     disabled={processing}
                                 >
-                                    Already registered?
+                                    ¿Ya tienes cuenta?
                                 </Link>
 
-                                <PrimaryButton className="ms-4 flex items-center justify-center gap-2" disabled={processing}>
+                                <PrimaryButton
+                                    className="flex items-center justify-center gap-2 px-6 py-2"
+                                    disabled={processing}
+                                >
                                     {processing && (
                                         <FaSpinner className="animate-spin" />
                                     )}
-                                    {processing ? 'Processing...' : 'Register'}
+                                    {processing ? 'Procesando...' : 'Registrarme'}
                                 </PrimaryButton>
                             </div>
                         </form>
