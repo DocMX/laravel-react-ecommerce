@@ -8,6 +8,10 @@ const backgroundImages = [
   '/img/ban4.avif',
   ];
 
+// This component displays a banner with a rotating background image and animated text.
+// It uses Framer Motion for animations and transitions.  
+
+
 export default function Banner() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
