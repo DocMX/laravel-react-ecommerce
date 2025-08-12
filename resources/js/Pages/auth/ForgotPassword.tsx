@@ -1,15 +1,12 @@
 import { FormEventHandler } from 'react';
 import { Head, useForm } from '@inertiajs/react';
-
 import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
 import TextInput from '@/Components/Core/TextInput';
 import InputError from '@/Components/Core/InputError';
 import PrimaryButton from '@/Components/Core/PrimaryButton';
 
 export default function ForgotPassword({ status }: { status?: string }) {
-    const { data, setData, post, processing, errors } = useForm({
-        email: '',
-    });
+    const { data, setData, post, processing, errors } = useForm({ email: '' });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -20,45 +17,39 @@ export default function ForgotPassword({ status }: { status?: string }) {
         <AuthenticatedLayout>
             <Head title="Forgot Password" />
 
-            <div className="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded shadow">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
-                    Forgot your password?
-                </h2>
+            <div className="max-w-sm mx-auto mt-12 p-6 bg-white dark:bg-gray-800 rounded-lg shadow text-center">
+                <img
+                    src="/img/Waifu.webp"
+                    alt="Clumsy anime waifu"
+                    className="mx-auto mb-4 w-32 h-32 object-cover rounded-full shadow-md"
+                />
 
+                <h1 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    Forgot your password?
+                </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    No problem. Just enter your email address below and we'll send you a link to reset your password.
+                    Enter your email and we’ll send you a reset link.
                 </p>
 
-                {status && (
-                    <div className="mb-4 text-sm font-medium text-green-600 dark:text-green-400">
-                        {status}
-                    </div>
-                )}
+                {status && <p className="mb-4 text-sm text-green-600">{status}</p>}
 
-                <form onSubmit={submit}>
+                <form onSubmit={submit} className="space-y-4 text-left">
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Email Address
-                        </label>
-
                         <TextInput
                             id="email"
                             type="email"
-                            name="email"
                             value={data.email}
-                            className="mt-1 block w-full"
-                            isFocused={true}
+                            placeholder="you@example.com"
+                            className="w-full"
+                            isFocused
                             onChange={(e) => setData('email', e.target.value)}
                         />
-
-                        <InputError message={errors.email} className="mt-2" />
+                        <InputError message={errors.email} className="mt-1" />
                     </div>
 
-                    <div className="mt-6 flex justify-end">
-                        <PrimaryButton disabled={processing}>
-                            Send Password Reset Link
-                        </PrimaryButton>
-                    </div>
+                    <PrimaryButton className="w-full" disabled={processing}>
+                        Send Reset Link
+                    </PrimaryButton>
                 </form>
             </div>
         </AuthenticatedLayout>

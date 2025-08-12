@@ -32,7 +32,7 @@ export default function Login({ status, canResetPassword }: { status?: string; c
                     {/* Imagen lateral */}
                     <div className="hidden md:block bg-gradient-to-br from-purple-500 to-indigo-500 relative">
                         <img
-                            src="https://images.unsplash.com/photo-1605902711622-cfb43c4437d7?auto=format&fit=crop&w=800&q=80"
+                            src="/img/logintest1.webp"
                             alt="Login illustration"
                             className="w-full h-full object-cover opacity-90"
                         />
