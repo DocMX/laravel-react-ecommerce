@@ -14,7 +14,17 @@ export default function Login({ status, canResetPassword }: { status?: string; c
         password: '',
         remember: false as boolean,
     });
-
+    // Handle form submission
+    // Reset password field after submission to avoid showing it in the form again
+    // This is useful if you want to clear the password field after a successful login attempt
+    // or if you want to reset the form state for any reason.
+    // You can adjust this behavior based on your application's requirements.
+    // The `onFinish` callback is called after the form submission is complete, regardless of success or failure.
+    // It allows you to perform any cleanup or reset actions after the form submission.
+    // In this case, it resets the password field to an empty string.
+    // This is useful to ensure that the password field does not retain the value after submission,
+    // which is a common practice for security reasons.
+    // If you want to keep the password field value after submission, you can remove the `onFinish` option.
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('login'), {
