@@ -21,7 +21,9 @@ export default function Register() {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };
-
+    // Register component renders a registration form with fields for name, email, password, and password confirmation.
+    // It uses the useForm hook from Inertia.js to manage form state and handle submission.
+    // The form includes validation error messages and a submit button that shows a spinner when processing.    
     return (
         <AuthenticatedLayout>
             <Head title="Register" />
