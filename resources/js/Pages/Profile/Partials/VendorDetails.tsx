@@ -13,7 +13,7 @@ export default function VendorDetails({ className = '' }: { className?: string }
     const [successMessage, setSuccessMessage] = useState('');
     const user = usePage().props.auth.user;
     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    console.log('token', token);
+
     const { data, setData, errors, post, processing, recentlySuccessful } = useForm({
         store_name: user.vendor?.store_name || user.name.toLocaleLowerCase().replace(/\s+/g, '-'),
         store_address: user.vendor?.store_address,
